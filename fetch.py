@@ -36,7 +36,7 @@ def careful_fetch(url):
 def detect_show(artist, title):
     return "Ö3" in artist or "LiveStream" in title or "Radio Tirol" in title \
            or "mein radio" in title.lower() or "SCHOENSTEN OLDIES" in title \
-           or "RADIO STEIERMARK" in title
+           or "RADIO STEIERMARK" in artist or "Radio Burgenland" in artist
 
 
 def time_to_date(time):
@@ -60,10 +60,12 @@ def add_entry(time, artist, title):
     except DoesNotExist:
         song_object = Song.create(artist=artist, title=title, show=detect_show(artist, title))
 
-    try:
-        Play.create(song=song_object, channel=channel, time=time)
-    except IntegrityError:
+    query = Play.select().where((Play.song == song_object) & (Play.channel == channel) &
+                                (Play.time.between(time - timedelta(minutes=20), time)))
+    if query.exists():
         print("has already been added")
+    else:
+        Play.create(song=song_object, channel=channel, time=time)
 
 
 for channel in Channel.select():
