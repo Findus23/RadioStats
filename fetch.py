@@ -61,7 +61,7 @@ def add_entry(time, artist, title):
         song_object = Song.create(artist=artist, title=title, show=detect_show(artist, title))
 
     query = Play.select().where((Play.song == song_object) & (Play.channel == channel) &
-                                (Play.time.between(time - timedelta(minutes=20), time)))
+                                (Play.time.between(time - timedelta(minutes=20), time + timedelta(minutes=20))))
     if query.exists():
         print("has already been added")
     else:
