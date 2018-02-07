@@ -92,7 +92,7 @@ for channel in Channel.select():
             description = tds[1].get_text()
             if " - " in description:
                 print(description)
-                artist, title = description.split(" - ")[:2]
+                title, artist = description.split(" - ")[:2]  # non oe3 channels are the other way round
             else:
                 artist = ""
                 title = description
