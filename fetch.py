@@ -81,8 +81,6 @@ for channel in Channel.select():
 
             add_entry(time, artist, title)
     else:
-        # if channel.shortname != "noe":
-        #     continue
         print(channel.streamurl + "played.html")
         r = careful_fetch(channel.streamurl + "played.html")
         soup = BeautifulSoup(r.text.encode('latin1').decode('utf8'), 'html.parser')
