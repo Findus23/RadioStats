@@ -37,7 +37,9 @@ def detect_show(artist, title):
     return "Ö3" in artist or "LiveStream" in title or "Radio Tirol" in title \
            or "mein radio" in title.lower() or "SCHOENSTEN OLDIES" in title \
            or "RADIO STEIERMARK" in title or "Radio Burgenland" in title \
-           or "FM4 " in title or "Radio Salzburg" in title or (title == "" and artist == "")
+           or "FM4 " in title or "Radio Salzburg" in title \
+           or "RADIO OÖ" == title \
+           or (title == "" and artist == "")
 
 
 def time_to_date(time):
@@ -97,8 +99,8 @@ for channel in Channel.select():
             else:
                 artist = ""
                 title = description
-            if channel.shortname == "fm4" and "|" in title:
-                title = title.split("|")[0]
+            if channel.shortname == "fm4" and "|" in artist:
+                artist = artist.split("|")[0]
 
             time = time_to_date(datetime.strptime(timestring, "%H:%M:%S").time())
             add_entry(time, artist, title)
