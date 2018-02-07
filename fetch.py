@@ -34,9 +34,10 @@ def careful_fetch(url):
 
 
 def detect_show(artist, title):
-    return "Ö3" in artist or "LiveStream" in title or "Radio Tirol" in title \
-           or "mein radio" in title.lower() or "SCHOENSTEN OLDIES" in title \
-           or "RADIO STEIERMARK" in artist or "Radio Burgenland" in artist
+    return "Ö3" in artist or "LiveStream" in title or "Radio Tirol" in artist \
+           or "mein radio" in artist.lower() or "SCHOENSTEN OLDIES" in artist \
+           or "RADIO STEIERMARK" in title or "Radio Burgenland" in title \
+           or "FM4 " in artist or "Radio Salzburg" in artist
 
 
 def time_to_date(time):
