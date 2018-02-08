@@ -7,7 +7,6 @@ from playhouse.flask_utils import FlaskDB, get_object_or_404, object_list
 import config
 
 DATABASE = MySQLDatabase("radio", **config.db)
-DEBUG = True
 
 
 # Create a Flask WSGI app and configure it using values from the module.
