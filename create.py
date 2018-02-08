@@ -1,7 +1,4 @@
-import json
-
-import requests
-
+import channelInfo
 from models import *
 
 for i in [Play, Channel, Song]:
@@ -9,23 +6,13 @@ for i in [Play, Channel, Song]:
 for i in [Channel, Song, Play]:
     i.create_table()
 
-r = requests.get('http://radio.orf.at/player/js/config.js')
-config_js = r.text
-pseudo_json = config_js \
-    .replace("// here be the settings for all radio programs", "") \
-    .replace("var stations = ", "") \
-    .replace("};", "}") \
-    .replace("Burgenland\",", "Burgenland\"")
-
-config = json.loads(pseudo_json)
-
-for id, channel in config.items():
-    if id != "validStationList" and "apasf.sf.apa.at" in channel["streamurl"] and id != "oe1":
-        streamurl = channel["streamurl"].replace(";", "")
-        try:
-            r = requests.get(streamurl + "played.html?type=json")
-            supports_json = r.status_code == 200
-        except requests.exceptions.ConnectionError:
-            supports_json = False
-        Channel.get_or_create(shortname=channel["shortname"], streamurl=streamurl,
-                              stationname=channel["stationname"], supports_json=supports_json)
+for id, channel in channelInfo.channels.items():
+    if "streamurlShoutcast2" in channel:
+        streamurl = channel["streamurlShoutcast2"].replace(";", "")
+    else:
+        streamurl = None
+    if "cStationName" in channel:
+        channel["stationname"] = channel["cStationName"]
+    Channel.create(shortname=channel["shortname"], streamurl=streamurl,
+                   stationname=channel["stationname"], has_data=channel["cHasData"],
+                   primary_color=channel["cPrimaryColor"], secondary_color=channel["cSecondaryColor"])

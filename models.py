@@ -5,9 +5,11 @@ from basemodel import BaseModel
 
 class Channel(BaseModel):
     shortname = CharField(unique=True, max_length=5)
-    streamurl = CharField()
+    streamurl = CharField(null=True)
     stationname = CharField()
-    supports_json = BooleanField()
+    has_data = BooleanField()
+    primary_color = CharField(max_length=7)
+    secondary_color = CharField(max_length=7,null=True)
 
 
 class Song(BaseModel):

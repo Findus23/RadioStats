@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from time import sleep
 
 import requests
-from bs4 import BeautifulSoup
 
 from models import *
 
@@ -15,6 +14,7 @@ def careful_fetch(url):
     """
     :rtype: requests.models.Response
     """
+    print(url)
     result = None
     tries = 0
     while result is None:
@@ -38,22 +38,8 @@ def detect_show(artist, title):
            or "mein radio" in title.lower() or "SCHOENSTEN OLDIES" in title \
            or "RADIO STEIERMARK" in title or "Radio Burgenland" in title \
            or "FM4 " in title or "Radio Salzburg" in title \
-           or "RADIO OÖ" == title \
+           or "RADIO OÖ" == title or "Radio Wien" in title \
            or (title == "" and artist == "")
-
-
-def time_to_date(time):
-    """
-
-    :rtype: datetime.datetime
-    :type time: datetime.time
-    """
-    time_hour = time.hour
-    day = datetime.now()
-    current_hour = day.hour
-    if 0 <= current_hour <= 3 and 22 <= time_hour <= 24:
-        day = datetime.today() - timedelta(days=1)
-    return datetime.combine(day.date(), time)
 
 
 def add_entry(time, artist, title):
@@ -72,33 +58,21 @@ def add_entry(time, artist, title):
 
 
 for channel in Channel.select():
-    if channel.supports_json:
+    if channel.has_data:
         r = careful_fetch(channel.streamurl + "played.html?type=json")
         print(r.text)
         for song in r.json():
             time = datetime.fromtimestamp(song["playedat"])
-            artist, title = song["title"].split(" - ")
 
-            add_entry(time, artist, title)
-    else:
-        print(channel.streamurl + "played.html")
-        r = careful_fetch(channel.streamurl + "played.html")
-        soup = BeautifulSoup(r.text.encode('latin1').decode('utf8'), 'html.parser')
-        table = soup.find_all("table")[2]
-        for b in table("b"):
-            b.extract()
-        for tr in table.find_all("tr")[1:]:
-            tds = tr.find_all("td")
-            timestring = tds[0].get_text()
-            description = tds[1].get_text()
-            if " - " in description:
-                print(description)
-                title, artist = description.split(" - ")[:2]  # non oe3 channels are the other way round
+            if " - " in song["title"]:
+                if channel.shortname == "oe3" or channel.shortname=="fm4":
+                    artist, title = song["title"].split(" - ")
+                else:
+                    title, artist = song["title"].split(" - ")[:2]  # non oe3 channels are the other way round
             else:
                 artist = ""
-                title = description
+                title = song["title"]
             if channel.shortname == "fm4" and "|" in artist:
                 artist = artist.split("|")[0]
 
-            time = time_to_date(datetime.strptime(timestring, "%H:%M:%S").time())
             add_entry(time, artist, title)
