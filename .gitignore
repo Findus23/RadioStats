@@ -2,3 +2,5 @@ config.py
 __pycache__/
 .idea/
 queries.sql
+dist/
+web/node_modules/
