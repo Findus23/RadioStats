@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from playhouse.shortcuts import model_to_dict
 
 from app import app
@@ -41,6 +41,9 @@ def popular(channel):
         .join(Channel).switch(Play).join(Song) \
         .where((Song.show == 0) & (Channel.shortname == channel)) \
         .group_by(Play.song).order_by(SQL('count').desc())
+    if request.args.get('offset'):
+        print(request.args.get('offset'))
+        get = get.offset(int(request.args.get('offset')))
     return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id])
 
 

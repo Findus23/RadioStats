@@ -72,7 +72,7 @@ for channel in Channel.select():
             else:
                 artist = ""
                 title = song["title"]
-            if channel.shortname == "fm4" and "|" in artist:
-                artist = artist.split("|")[0]
+            if channel.shortname == "fm4" and "|" in title:
+                title = title.split("|")[0]
 
             add_entry(time, artist, title)
