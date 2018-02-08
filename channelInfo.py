@@ -14,7 +14,7 @@ channels = {
         "stationname": "Radio Österreich 1",
         "cHasData": False,
         "cPrimaryColor": "#b11a1a",
-        "cSecondaryColor": None,
+        "cSecondaryColor": "#ffffff",
         "cStationName": "Radio Ö1"
 
     },
@@ -53,7 +53,7 @@ channels = {
         "stationname": "Radio FM4",
         "cHasData": True,
         "cPrimaryColor": "#FFE500",
-        "cSecondaryColor": None
+        "cSecondaryColor": "#000000",
     },
     "bgl": {
         "shortname": "bgl",

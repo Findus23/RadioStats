@@ -9,7 +9,7 @@ class Channel(BaseModel):
     stationname = CharField()
     has_data = BooleanField()
     primary_color = CharField(max_length=7)
-    secondary_color = CharField(max_length=7,null=True)
+    secondary_color = CharField(max_length=7)
 
 
 class Song(BaseModel):
