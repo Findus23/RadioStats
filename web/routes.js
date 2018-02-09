@@ -28,6 +28,15 @@ let router = new Router({
 });
 
 router.afterEach((to, from) => {
+    _paq.push(['setCustomUrl', to.fullPath]);
+    if (from.matched.length !== 0 && from.fullPath !== "/") {
+        _paq.push(['setReferrerUrl', from.fullPath]);
+    }
+    _paq.push(['setGenerationTimeMs', 0]);
+    _paq.push(['setDocumentTitle', document.title]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+
 
 });
 export default router;

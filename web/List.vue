@@ -17,18 +17,21 @@
         <header v-if="channelData"
                 :style="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}">
             <h2 v-if="channelData">{{channelData.stationname}}</h2>
-            <!--<h3>{{momentDate.calendar()}}</h3>-->
-
+            <div role="button" tabindex="0" v-on:click="toogleVisibility" v-on:keyup.enter="toogleVisibility">
+                Meistgespielte Lieder {{formatDate()}}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" :class="showDate?[]:['disabled']">
+                    <path d="M480 344.181L268.869 131.889c-15.756-15.859-41.3-15.859-57.054 0-15.754 15.857-15.754 41.57 0 57.431l237.632 238.937c8.395 8.451 19.562 12.254 30.553 11.698 10.993.556 22.159-3.247 30.555-11.698L748.186 189.32c15.756-15.86 15.756-41.571 0-57.431s-41.299-15.859-57.051 0L480 344.181z"></path>
+                </svg>
+            </div>
         </header>
-        <main>
-            <div id="date" class="row">
-                <div class="column">
+        <transition name="expand">
+            <div id="date" v-if="showDate">
+                <div>
                     <datepicker language="de" v-model="date" :mondayFirst="true" :inline="true"
                                 :highlighted="highlighted"></datepicker>
 
                 </div>
-                <div class="column">
-
+                <div>
                     <input type="radio" id="day" value="day" v-model="dateType">
                     <label class="label-inline" for="day">Tag</label>
                     <br>
@@ -42,6 +45,8 @@
                     <label class="label-inline" for="alltime">Gesamter Zeitraum</label>
                 </div>
             </div>
+        </transition>
+        <main>
             <table>
                 <tr v-for="song in popular">
                     <td>{{song.song.title}}</td>
@@ -49,7 +54,8 @@
                     <td>{{song.count}}</td>
                 </tr>
             </table>
-            <div id="loadMore" role="button" v-on:click="getAdditional" v-if="showMore &&channelData">
+            <div id="loadMore" role="button" tabindex="0" v-on:click="getAdditional" v-on:keyup.enter="getAdditional"
+                 v-if="showMore &&channelData">
                 Mehr anzeigen
             </div>
             <div id="httpError" v-if="httpError" class="message">
@@ -68,6 +74,10 @@
     import "moment/locale/de-at";
     import Datepicker from 'vuejs-datepicker';
 
+    if (process.env.NODE_ENV === "production") {
+        axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
+    }
+
     const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
     export default {
@@ -85,7 +95,8 @@
                 highlighted: {
                     from: new Date(),
                     to: new Date(),
-                }
+                },
+                showDate: false
             };
         },
         props: ["channel"],
@@ -105,7 +116,9 @@
                 })
                     .then(function (response) {
                         vm.channels = response.data;
+                        document.title = "Radiostats - " + vm.channels[vm.channel].stationname;
                         vm.getPopular();
+
                     })
                     .catch(function (error) {
                         vm.httpError = error;
@@ -173,11 +186,9 @@
                 let date = moment(this.date);
                 if (this.dateType !== "alltime") {
                     from = moment(date);
-                    to =moment(date);
+                    to = moment(date);
                     from.startOf(this.dateType);
                     to.endOf(this.dateType);
-                    console.info(from.toString());
-                    console.info(to.toString());
                 } else {
                     from = moment("2000-01-01");
                     to = moment("2025-01-01");
@@ -186,10 +197,26 @@
                     "from": from.toDate(),
                     "to": to.toDate(),
                 };
+            },
+            formatDate: function () {
+                switch (this.dateType) {
+                    case "day":
+                        return "am " + this.momentDate.format("D. MMMM");
+                    case "week":
+                        return "in der Woche des " + this.momentDate.format("D. MMMM");
+                    case "month":
+                        return "im " + this.momentDate.format("MMMM YYYY");
+                    case "alltime":
+                        return "im gesamten Zeitraum";
+                }
+            },
+            toogleVisibility: function () {
+                this.showDate = !this.showDate;
             }
         },
         watch: {
             channel: function () {
+                document.title = "Radiostats - " + this.channelData.stationname;
                 this.getPopular();
             },
             dateType: function () {
@@ -224,10 +251,24 @@
     header {
         padding: 2.5rem;
         transition: color .2s, background-color .2s;
-        h2 {
+        h2, div {
             font-weight: bold;
             text-align: center;
             margin: 0;
+        }
+        div {
+            cursor: pointer;
+            font-size: 3.0rem;
+            line-height: 1.3;
+            svg {
+                width: 32px;
+                height: 18.66px;
+                transition: transform .3s;
+                &.disabled {
+                    transform: rotate(-90deg);
+
+                }
+            }
         }
     }
 
@@ -240,6 +281,12 @@
         margin: 16px 0;
         display: flex;
         justify-content: space-around;
+        @media screen and (max-width: 500px) {
+            flex-wrap: wrap;
+            a {
+                margin: 10px 10px;
+            }
+        }
         a {
             display: block;
             img {
@@ -280,11 +327,41 @@
     }
 
     #date {
+        background-color: #eee;
         align-items: center;
         .vdp-datepicker__calendar {
             margin-right: 0;
             margin-left: auto;
         }
+        display: flex;
+        flex-direction: row;
+        > div {
+            width: 50%;
+            padding: 0 15px;
+        }
+        @media (max-width: 700px) {
+            flex-direction: column;
+            > div {
+                .vdp-datepicker {
+                    margin: 0 auto;
+
+                }
+                width: 100%;
+                padding: 15px 0 15px 15px;
+            }
+        }
+    }
+
+    .expand-enter-active, .expand-leave-active {
+        transition: max-height .3s;
+
+        max-height: 307px;
+        overflow: hidden;
+    }
+
+    .expand-enter, .expand-leave-to {
+
+        max-height: 0;
     }
 
 </style>
