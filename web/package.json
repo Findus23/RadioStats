@@ -14,6 +14,7 @@
     "axios": "^0.17.1",
     "markdown-it": "^8.4.0",
     "milligram": "git+https://github.com/Findus23/milligram.git",
+    "moment": "^2.20.1",
     "normalize.css": "^7.0.0",
     "vue": "^2.5.13",
     "vue-head": "^2.0.12",

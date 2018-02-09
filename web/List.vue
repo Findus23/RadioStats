@@ -17,6 +17,7 @@
         <header v-if="channelData"
                 :style="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}">
             <h2 v-if="channelData">{{channelData.stationname}}</h2>
+            <!--<h3>{{momentDate.calendar()}}</h3>-->
 
         </header>
         <main>
@@ -63,6 +64,8 @@
 
 <script>
     import axios from "axios";
+    import moment from "moment";
+    import "moment/locale/de-at";
     import Datepicker from 'vuejs-datepicker';
 
     const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
@@ -89,6 +92,9 @@
         computed: {
             channelData: function () {
                 return this.channels[this.channel];
+            },
+            momentDate: function () {
+                return moment(this.date);
             }
         },
         methods: {
@@ -117,13 +123,17 @@
                 let vm = this;
                 axios.get(baseURL + this.channel, {
                     params: {
-                        date: vm.date.toISOString().split('T')[0],
+                        date: vm.momentDate.format("YYYY-MM-DD"),
                         dateType: vm.dateType
                     }
                 })
                     .then(function (response) {
                         vm.offset += 5;
                         vm.popular = response.data;
+                        if (response.data.length < 5) {
+                            vm.showMore = false;
+                        }
+
                     })
                     .catch(function (error) {
                         vm.httpError = error;
@@ -135,7 +145,7 @@
                 axios.get(baseURL + this.channel, {
                     params: {
                         offset: vm.offset,
-                        date: vm.date.toISOString().split('T')[0],
+                        date: vm.momentDate.format("YYYY-MM-DD"),
                         dateType: vm.dateType
                     }
                 })
@@ -160,34 +170,21 @@
             },
             updateSelection: function () {
                 let from, to;
-                let y = this.date.getFullYear();
-                let d = this.date.getDay();
-                let m = this.date.getMonth();
-                switch (this.dateType) {
-                    case "day":
-                        from = new Date(this.date);
-                        to = new Date(this.date);
-                        break;
-                    case "week":
-                        let diff = this.date.getDate() - (d - 1) + (d === 0 ? -7 : 0);
-                        from = new Date(this.date);
-                        from.setDate(diff);
-                        to = new Date(this.date);
-                        to.setDate(diff + 6);
-                        break;
-                    case "month":
-                        from = new Date(y, m, 1);
-                        to = new Date(y, m + 1, 1);
-                        break;
-                    default:
-                        from = new Date(2000, 0, 0);
-                        to = new Date(2050, 0, 0);
+                let date = moment(this.date);
+                if (this.dateType !== "alltime") {
+                    from = moment(date);
+                    to =moment(date);
+                    from.startOf(this.dateType);
+                    to.endOf(this.dateType);
+                    console.info(from.toString());
+                    console.info(to.toString());
+                } else {
+                    from = moment("2000-01-01");
+                    to = moment("2025-01-01");
                 }
-                from.setHours(0, 0, 0, 0);
-                to.setHours(23, 59, 59, 0);
                 this.highlighted = {
-                    "from": from,
-                    "to": to,
+                    "from": from.toDate(),
+                    "to": to.toDate(),
                 };
             }
         },

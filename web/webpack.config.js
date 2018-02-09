@@ -95,7 +95,8 @@ module.exports = {
             hashFuncNames: ['sha256'],
             enabled: process.env.NODE_ENV === 'production',
         }),
-        new webpack.optimize.CommonsChunkPlugin({name: "commons"})
+        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/)
     ]
 };
 
