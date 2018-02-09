@@ -261,6 +261,7 @@
             font-size: 3.0rem;
             line-height: 1.3;
             svg {
+                fill: currentColor;
                 width: 32px;
                 height: 18.66px;
                 transition: transform .3s;
