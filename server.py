@@ -29,12 +29,12 @@ def query_to_response(query, limit=5, key=False, **kwargs):
     return response
 
 
-@app.route('/')
+@app.route('/api/')
 def index():
     return query_to_response(Channel.select(), limit=False, key="shortname")
 
 
-@app.route('/<channel>')
+@app.route('/api/<channel>')
 def popular(channel):
     # range = request.args.get('')
     get = Play.select(Play.song, fn.Count(SQL('*')).alias("count")) \
