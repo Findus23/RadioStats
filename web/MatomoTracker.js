@@ -9,7 +9,7 @@ export default class MatomoTracker {
             (function() {
                 let u = (process.env.NODE_ENV === "production") ? "https://matomo.lw1.at/" : "//localhost/piwik/";
                 _paq.push(['setTrackerUrl', u + 'piwik.php']);
-                _paq.push(['setSiteId', (process.env.NODE_ENV === "production") ? 14 : 5]);
+                _paq.push(['setSiteId', (process.env.NODE_ENV === "production") ? 15 : 5]);
                 let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
                 g.type = 'text/javascript';
                 g.async = true;

@@ -66,7 +66,7 @@ for channel in Channel.select():
 
             if " - " in song["title"]:
                 if channel.shortname == "oe3" or channel.shortname=="fm4":
-                    artist, title = song["title"].split(" - ")
+                    artist, title = song["title"].split(" - ")[:2]
                 else:
                     title, artist = song["title"].split(" - ")[:2]  # non oe3 channels are the other way round
             else:

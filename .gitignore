@@ -4,3 +4,4 @@ __pycache__/
 queries.sql
 dist/
 web/node_modules/
+web/stats.json

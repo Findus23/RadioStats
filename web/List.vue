@@ -20,6 +20,27 @@
 
         </header>
         <main>
+            <div id="date" class="row">
+                <div class="column">
+                    <datepicker language="de" v-model="date" :mondayFirst="true" :inline="true"
+                                :highlighted="highlighted"></datepicker>
+
+                </div>
+                <div class="column">
+
+                    <input type="radio" id="day" value="day" v-model="dateType">
+                    <label class="label-inline" for="day">Tag</label>
+                    <br>
+                    <input type="radio" id="week" value="week" v-model="dateType">
+                    <label class="label-inline" for="week">Woche</label>
+                    <br>
+                    <input type="radio" id="month" value="month" v-model="dateType">
+                    <label class="label-inline" for="month">Monat</label>
+                    <br>
+                    <input type="radio" id="alltime" value="alltime" v-model="dateType">
+                    <label class="label-inline" for="alltime">Gesamter Zeitraum</label>
+                </div>
+            </div>
             <table>
                 <tr v-for="song in popular">
                     <td>{{song.song.title}}</td>
@@ -42,9 +63,12 @@
 
 <script>
     import axios from "axios";
+    import Datepicker from 'vuejs-datepicker';
+
+    const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
     export default {
-        components: {},
+        components: {Datepicker},
         name: 'list',
         data() {
             return {
@@ -52,86 +76,138 @@
                 popular: [],
                 offset: 0,
                 showMore: true,
-                httpError: false
+                httpError: false,
+                date: new Date(),
+                dateType: "week",
+                highlighted: {
+                    from: new Date(),
+                    to: new Date(),
+                }
             };
         },
         props: ["channel"],
         computed: {
-            channelData: function() {
+            channelData: function () {
                 return this.channels[this.channel];
             }
         },
         methods: {
-            getChannels: function() {
+            getChannels: function () {
                 let vm = this;
-                axios.get('http://127.0.0.1:5001/', {
+                axios.get(baseURL, {
                     params: {}
                 })
-                    .then(function(response) {
+                    .then(function (response) {
                         vm.channels = response.data;
                         vm.getPopular();
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         vm.httpError = error;
                     });
             },
-            getPopular: function() {
+            getPopular: function () {
+                this.offset = 0;
+                this.showMore = true;
+                this.httpError = false;
+
                 if (!this.channelData || !this.channelData.has_data) {
                     this.popular = [];
                     return false;
                 }
                 let vm = this;
-                axios.get('http://127.0.0.1:5001/' + this.channel, {
-                    params: {}
+                axios.get(baseURL + this.channel, {
+                    params: {
+                        date: vm.date.toISOString().split('T')[0],
+                        dateType: vm.dateType
+                    }
                 })
-                    .then(function(response) {
+                    .then(function (response) {
                         vm.offset += 5;
                         vm.popular = response.data;
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         vm.httpError = error;
                     });
             },
-            getAdditional: function() {
+            getAdditional: function () {
                 let vm = this;
 
-                axios.get('http://127.0.0.1:5001/' + this.channel, {
+                axios.get(baseURL + this.channel, {
                     params: {
-                        offset: vm.offset
+                        offset: vm.offset,
+                        date: vm.date.toISOString().split('T')[0],
+                        dateType: vm.dateType
                     }
                 })
-                    .then(function(response) {
+                    .then(function (response) {
                         vm.offset += 5;
                         vm.popular = vm.popular.concat(response.data);
                         if (response.data.length < 5) {
-                            vm.showMore = false
+                            vm.showMore = false;
                         }
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         vm.httpError = error;
                     });
 
             },
-            icon: function(id) {
+            icon: function (id) {
                 if (id === "fm4" || id === "oe3") {
                     return id + ".svg";
                 } else {
                     return id + ".png";
                 }
+            },
+            updateSelection: function () {
+                let from, to;
+                let y = this.date.getFullYear();
+                let d = this.date.getDay();
+                let m = this.date.getMonth();
+                switch (this.dateType) {
+                    case "day":
+                        from = new Date(this.date);
+                        to = new Date(this.date);
+                        break;
+                    case "week":
+                        let diff = this.date.getDate() - (d - 1) + (d === 0 ? -7 : 0);
+                        from = new Date(this.date);
+                        from.setDate(diff);
+                        to = new Date(this.date);
+                        to.setDate(diff + 6);
+                        break;
+                    case "month":
+                        from = new Date(y, m, 1);
+                        to = new Date(y, m + 1, 1);
+                        break;
+                    default:
+                        from = new Date(2000, 0, 0);
+                        to = new Date(2050, 0, 0);
+                }
+                from.setHours(0, 0, 0, 0);
+                to.setHours(23, 59, 59, 0);
+                this.highlighted = {
+                    "from": from,
+                    "to": to,
+                };
             }
-
         },
         watch: {
-            channel: function(id) {
-                this.offset = 0;
-                this.showMore = true;
-                this.httpError = false;
-
-                this.getPopular()
+            channel: function () {
+                this.getPopular();
+            },
+            dateType: function () {
+                this.updateSelection();
+                this.getPopular();
+            },
+            date: function () {
+                this.updateSelection();
+                this.getPopular();
             }
+
         },
-        mounted: function() {
+        mounted: function () {
             this.getChannels();
+            this.updateSelection();
         }
     };
 </script>
@@ -204,6 +280,14 @@
 
     #httpError {
         background-color: $warning;
+    }
+
+    #date {
+        align-items: center;
+        .vdp-datepicker__calendar {
+            margin-right: 0;
+            margin-left: auto;
+        }
     }
 
 </style>
