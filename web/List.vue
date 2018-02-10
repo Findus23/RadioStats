@@ -65,6 +65,7 @@
                 <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
             </div>
         </main>
+        <info :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"> </info>
     </div>
 </template>
 
@@ -73,6 +74,7 @@
     import moment from "moment";
     import "moment/locale/de-at";
     import Datepicker from 'vuejs-datepicker';
+    import Info from "./Info.vue";
 
     if (process.env.NODE_ENV === "production") {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
@@ -81,7 +83,7 @@
     const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
     export default {
-        components: {Datepicker},
+        components: {Datepicker, Info},
         name: 'list',
         data() {
             return {
@@ -141,9 +143,9 @@
                     }
                 })
                     .then(function (response) {
-                        vm.offset += 5;
+                        vm.offset += 10;
                         vm.popular = response.data;
-                        if (response.data.length < 5) {
+                        if (response.data.length < 10) {
                             vm.showMore = false;
                         }
 
@@ -163,9 +165,9 @@
                     }
                 })
                     .then(function (response) {
-                        vm.offset += 5;
+                        vm.offset += 10;
                         vm.popular = vm.popular.concat(response.data);
-                        if (response.data.length < 5) {
+                        if (response.data.length < 10) {
                             vm.showMore = false;
                         }
                     })

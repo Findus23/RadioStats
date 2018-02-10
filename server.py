@@ -8,7 +8,7 @@ from app import app
 from models import *
 
 
-def query_to_response(query, limit=5, key=False, **kwargs):
+def query_to_response(query, limit=10, key=False, **kwargs):
     """
 
     :type key: str
