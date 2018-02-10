@@ -65,7 +65,7 @@
                 <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
             </div>
         </main>
-        <info :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"> </info>
+        <info v-if="channelData" :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"> </info>
     </div>
 </template>
 
