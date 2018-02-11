@@ -54,7 +54,11 @@ def add_entry(time, artist, title):
     if query.exists():
         print("has already been added")
     else:
-        Play.create(song=song_object, channel=channel, time=time)
+        try:
+            Play.create(song=song_object, channel=channel, time=time)
+            raise IntegrityError
+        except IntegrityError as error:
+            print(error)
 
 
 for channel in Channel.select():
