@@ -56,7 +56,7 @@
                 </tr>
             </table>
             <div id="loadMore" role="button" tabindex="0" v-on:click="getAdditional" v-on:keyup.enter="getAdditional"
-                 v-if="showMore &&channelData">
+                 v-if="showMore &&channelData&&channelData.has_data">
                 Mehr anzeigen
             </div>
             <div id="httpError" v-if="httpError" class="message">
