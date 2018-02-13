@@ -211,5 +211,26 @@ channels = {
         "cHasData": True,
         "cPrimaryColor": "#ee7e01",
         "cSecondaryColor": "#552382"
+    },
+    "kht": {
+        "shortname": "kht",
+        "stationname": "Kronehit",
+        "cHasData": True,
+        "cPrimaryColor": "#000000",
+        "cSecondaryColor": "#b89c4f"
+    },
+    "886": {
+        "shortname": "886",
+        "stationname": "Radio 88.6",
+        "cHasData": True,
+        "cPrimaryColor": "#123e6b",
+        "cSecondaryColor": "#ffe116"
+    },
+    "ara": {
+        "shortname": "ara",
+        "stationname": "Radio Arabella",
+        "cHasData": True,
+        "cPrimaryColor": "#003e88",
+        "cSecondaryColor": "#e6007e"
     }
 }

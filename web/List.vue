@@ -179,7 +179,7 @@
 
             },
             icon: function (id) {
-                if (id === "fm4" || id === "oe3") {
+                if (id === "fm4" || id === "oe3" || id === "kht") {
                     return id + ".svg";
                 } else {
                     return id + ".png";

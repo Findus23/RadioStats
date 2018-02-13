@@ -1,36 +1,11 @@
-from datetime import datetime, timedelta
-from time import sleep
-
-import requests
+from datetime import timedelta
 
 from models import *
+from parser import kronehit, aas, orf, ara
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
 }
-
-
-def careful_fetch(url):
-    """
-    :rtype: requests.models.Response
-    """
-    print(url)
-    result = None
-    tries = 0
-    while result is None:
-        try:
-            req = requests.get(url, headers=headers)
-            if "Invalid resource" in req.text:
-                raise requests.exceptions.ConnectionError
-            return req
-
-        except requests.exceptions.ConnectionError:
-            print("404")
-            tries += 1
-            if tries >= 3:
-                raise Exception("too many retries")
-            sleep(1)
-            pass
 
 
 def detect_show(artist, title):
@@ -63,20 +38,14 @@ def add_entry(time, artist, title):
 
 for channel in Channel.select():
     if channel.has_data:
-        r = careful_fetch(channel.streamurl + "played.html?type=json")
-        print(r.text)
-        for song in r.json():
-            time = datetime.fromtimestamp(song["playedat"])
+        if channel.shortname == "kht":
+            pars = kronehit
+        elif channel.shortname == "886":
+            pars = aas
+        elif channel.shortname == "ara":
+            pars = ara
+        else:
+            pars = orf
 
-            if " - " in song["title"]:
-                if channel.shortname == "oe3" or channel.shortname=="fm4":
-                    artist, title = song["title"].split(" - ")[:2]
-                else:
-                    title, artist = song["title"].split(" - ")[:2]  # non oe3 channels are the other way round
-            else:
-                artist = ""
-                title = song["title"]
-            if channel.shortname == "fm4" and "|" in title:
-                title = title.split("|")[0]
-
+        for time, artist, title in pars.get(channel):
             add_entry(time, artist, title)
