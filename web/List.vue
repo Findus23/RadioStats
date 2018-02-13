@@ -2,7 +2,8 @@
     <div id="list">
         <div id="channelSelector">
             <router-link v-for="channel in channels" :key="channel.shortname"
-                         :to="{ name: 'List', params: { channel: channel.shortname }}">
+                         :to="{ name: 'List', params: { channel: channel.shortname }}"
+                         :style="{borderColor:channel.primary_color}">
                 <img :src="require('./icons/'+icon(channel.shortname))"
                      :alt="channel.stationname" :title="channel.stationname"
                      :class="channel.has_data?[]:['noData']">
@@ -65,7 +66,8 @@
                 <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
             </div>
         </main>
-        <info v-if="channelData" :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"> </info>
+        <info v-if="channelData"
+              :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"></info>
     </div>
 </template>
 
@@ -291,8 +293,14 @@
             }
         }
         a {
+            /*border-bottom: solid 5px;*/
+
+            &.router-link-active {
+                border-bottom: solid 5px;
+            }
             display: block;
             img {
+                margin-bottom: 5px;
                 display: block;
                 width: 40px;
                 height: 40px;
