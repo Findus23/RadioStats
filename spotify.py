@@ -11,7 +11,7 @@ crm = SpotifyClientCredentials(**spotify)
 sp = spotipy.Spotify(client_credentials_manager=crm)
 
 if len(sys.argv) > 1:
-    limit = sys.argv[1]
+    limit = int(sys.argv[1])
 else:
     limit = 50
 
