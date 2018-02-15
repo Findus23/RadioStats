@@ -19,6 +19,10 @@ def detect_show(artist, title):
 
 def add_entry(time, artist, title):
     print(time, artist, title)
+    if artist.isupper():
+        artist = artist.title()
+    if title.isupper():
+        title = title.title()
     try:
         song_object = Song.get(artist=artist, title=title)
     except DoesNotExist:

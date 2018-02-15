@@ -16,6 +16,11 @@ class Song(BaseModel):
     artist = CharField(max_length=150)
     title = CharField(max_length=150)
     show = BooleanField()
+    spotify_data = BooleanField(null=True)
+    preview_url = CharField(null=True)
+    spotify_url = CharField()
+    image_small = CharField()
+    image_large = CharField()
 
     class Meta:
         indexes = ((("artist", "title"), True),)

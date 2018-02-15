@@ -50,6 +50,10 @@
         <main>
             <table>
                 <tr v-for="song in popular">
+                    <td>
+                        <img v-if="song.song.image_small" :src="song.song.image_small">
+                        <div v-else class="img-placeholder"></div>
+                    </td>
                     <td>{{song.song.title}}</td>
                     <td>{{song.song.artist}}</td>
                     <td>{{song.count}}</td>
@@ -314,6 +318,12 @@
 
     table {
         margin: 0;
+        img, .img-placeholder {
+            width: 36px;
+            height: 36px;
+            background-color: #eee;
+            display: block;
+        }
     }
 
     #loadMore {
