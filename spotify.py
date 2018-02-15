@@ -1,7 +1,7 @@
+import sys
 from time import sleep
 
 import spotipy
-import sys
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from config import spotify
@@ -10,10 +10,12 @@ from models import *
 crm = SpotifyClientCredentials(**spotify)
 sp = spotipy.Spotify(client_credentials_manager=crm)
 
-if len(sys.argv) >1:
-    limit=sys.argv[1]
+if len(sys.argv) > 1:
+    limit = sys.argv[1]
+else:
+    limit = 50
 
-for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)).limit(50):
+for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)).limit(limit):
     print(song.title)
     if song.artist.isupper():
         song.artist = song.artist.title()
