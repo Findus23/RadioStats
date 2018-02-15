@@ -1,3 +1,4 @@
+import json
 import sys
 from time import sleep
 
@@ -24,6 +25,7 @@ for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)
 
     sleep(0.1)
     results = sp.search(q='title:' + song.title + ' artist:' + song.artist, type='track', limit=1)
+    print(json.dumps(results))
     if len(results["tracks"]["items"]) == 0:
         song.spotify_data = False
     else:
@@ -31,8 +33,9 @@ for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)
         song.spotify_url = track["external_urls"]["spotify"]
         song.preview_url = track["preview_url"]
         images = track["album"]["images"]
-        song.image_large = images[0]["url"]
-        song.image_small = images[-1]["url"]
+        if len(images):
+            song.image_large = images[0]["url"]
+            song.image_small = images[-1]["url"]
         song.spotify_data = True
 
         # print(song.title)
