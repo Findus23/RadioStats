@@ -37,7 +37,7 @@ def index():
     return query_to_response(Channel.select(), limit=False, key="shortname")
 
 
-def getRange(date, date_type):
+def get_range(date, date_type):
     if date_type == "day":
         start = date
         end = date
@@ -54,8 +54,7 @@ def getRange(date, date_type):
     return start, end
 
 
-@app.route('/api/<channel>')
-def popular(channel):
+def get_dates_from_request():
     try:
         date = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
         date_type = request.args.get('dateType')
@@ -64,7 +63,13 @@ def popular(channel):
     except (TypeError, ValueError):
         date = datetime.today()
         date_type = "month"
-    start, end = getRange(date, date_type)
+    return date, date_type
+
+
+@app.route('/api/<channel>')
+def popular(channel):
+    date, date_type = get_dates_from_request()
+    start, end = get_range(date, date_type)
     get = Play.select(Play.song, fn.Count(SQL('*')).alias("count")) \
         .join(Channel).switch(Play).join(Song) \
         .where((Song.show == 0) & (Channel.shortname == channel) & (
@@ -73,6 +78,16 @@ def popular(channel):
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
     return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id])
+
+
+@app.route('/api/<channel>/plays/<song_id>')
+def plays(channel, song_id):
+    date, date_type = get_dates_from_request()
+    start, end = get_range(date, date_type)
+    get = Play.select(Play.time) \
+        .join(Channel) \
+        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end)))
+    return query_to_response(get, exclude=[Play.channel, Play.song, Play.id], limit=False)
 
 
 if __name__ == '__main__':
