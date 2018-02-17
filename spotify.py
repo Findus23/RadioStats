@@ -16,12 +16,13 @@ else:
     limit = 50
 
 for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)).limit(limit):
+    song.title=song.title.replace("+"," ")
     print(song.title)
     if song.artist.isupper():
         song.artist = song.artist.title()
     if song.title.isupper():
         song.title = song.title.title()
-
+    print(song.id)
     sleep(0.1)
     results = sp.search(q='title:' + song.title + ' artist:' + song.artist, type='track', limit=1)
     if len(results["tracks"]["items"]) == 0:
