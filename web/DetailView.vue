@@ -17,11 +17,12 @@
         <div>
             <ul>
                 <li v-for="play in plays">
-                    {{play.format("dddd DD. MMMM: HH:MM:SS")}}
+                    {{play.format("dddd DD. MMMM: HH:mm:ss")}}
                 </li>
             </ul>
         </div>
-        <router-link class="closeButton" :to="{ name: 'List', params: { channel: $route.params.channel }}" replace>
+        <router-link class="closeButton" :to="{ name: 'List', params: { channel: $route.params.channel }}" replace
+                     :style="{color: color.backgroundColor}">
             &times;
         </router-link>
     </div>
@@ -46,7 +47,7 @@
                 plays: [],
             };
         },
-        props: ['songs', 'color','momentDate','dateType'],
+        props: ['songs', 'color', 'momentDate', 'dateType'],
         mounted() {
             this.getPlays();
             // document.body.style.overflow = "hidden";
@@ -155,9 +156,8 @@
             padding: 10px;
             cursor: pointer;
             transition: color 0.2s;
-            color: $color-primary;
             &:hover {
-                color: darkgrey;
+                color: darkgrey !important;
             }
 
         }

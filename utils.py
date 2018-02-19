@@ -36,7 +36,7 @@ def string_to_time(timestring):
 
     :rtype: datetime.time
     """
-    return datetime.strptime(timestring, "%H:%M:%S").time()
+    return datetime.strptime(timestring, "%H:%M:%S").utcnow().time()
 
 
 def time_to_date(time):

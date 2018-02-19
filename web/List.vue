@@ -142,7 +142,6 @@
                 }
 
                 let songArray = Object.values(this.songs);
-                console.info(songArray);
                 return songArray.sort(compare);
             }
 
@@ -253,7 +252,6 @@
                 this.showDate = !this.showDate;
             },
             toogleDetails: function ($event, songId) {
-                console.info($event);
                 if (this.$route.name !== "DetailView" || this.$route.params.songId !== songId) {
                     this.$router.replace({name: 'DetailView', params: {channel: this.channel, songId: songId}});
                 } else {
