@@ -1,6 +1,7 @@
 <template>
     <footer :style="color">
         <div><a href="https://lw1.at/de/impressum">Impressum</a></div>
+        <div><a class="small" href="https://developer.spotify.com/">Albumcover und Probehören mithife von Spotify</a></div>
         <div><a href="https://lw1.at/">Andere Projekte</a></div>
     </footer>
 </template>
@@ -26,6 +27,9 @@
             &:hover {
                 color: inherit;
                 filter: invert(30%);
+            }
+            &.small {
+                font-size: 70%;
             }
         }
     }
