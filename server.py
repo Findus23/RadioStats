@@ -8,9 +8,11 @@ from app import app
 from models import *
 
 
-def query_to_response(query, limit=10, key=False, **kwargs):
+def query_to_response(query, limit=10, key=False, sort=False, offset=None, list=None, **kwargs):
     """
 
+    :param sort: boolean
+    :param offset: int
     :type key: str
     :type limit: int|boolean
     :param **kwargs
@@ -20,10 +22,20 @@ def query_to_response(query, limit=10, key=False, **kwargs):
         query = query.limit(limit)
     print(query.sql())
     data = {} if key is not False else []
+    order = int(offset) if offset else 0
     for i in query:
         element = model_to_dict(i, **kwargs)
+        if list:
+            element = element[list]
+        if sort:
+            element["order"] = order
+            order += 1
         if key is not False:
-            data[getattr(i, key)] = element
+            if "." in key:
+                key1, key2 = key.split(".")
+                data[getattr(getattr(i, key1), key2)] = element
+            else:
+                data[getattr(i, key)] = element
         else:
             data.append(element)
     response = jsonify(data)
@@ -77,7 +89,8 @@ def popular(channel):
         .group_by(Play.song).order_by(SQL('count').desc())
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
-    return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id])
+    return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id], key="song.id",
+                             sort=True, offset=request.args.get('offset'))
 
 
 @app.route('/api/<channel>/plays/<song_id>')
@@ -86,8 +99,9 @@ def plays(channel, song_id):
     start, end = get_range(date, date_type)
     get = Play.select(Play.time) \
         .join(Channel) \
-        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end)))
-    return query_to_response(get, exclude=[Play.channel, Play.song, Play.id], limit=False)
+        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end)))\
+        .order_by(Play.time.desc())
+    return query_to_response(get, exclude=[Play.channel, Play.song, Play.id], list="time", limit=False)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import List from './List.vue';
+import DetailView from './DetailView.vue';
 import Router from 'vue-router';
 
 Vue.use(Router);
@@ -16,9 +17,9 @@ let router = new Router({
             name: 'List',
             component: List,
             props: true,
-            // children: [
-            //     {path: '/:language/:id', component: L, name: 'itemModal'}
-            // ]
+            children: [
+                {path: '/:channel/song/:songId', component: DetailView, name: 'DetailView'}
+            ]
         },
         {
             path: '*',

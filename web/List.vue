@@ -26,7 +26,7 @@
             </div>
         </header>
         <transition name="expand">
-            <div id="date" v-if="showDate">
+            <div id="date" class="customRow" v-if="showDate">
                 <div>
                     <datepicker language="de" v-model="date" :mondayFirst="true" :inline="true"
                                 :highlighted="highlighted"></datepicker>
@@ -49,15 +49,31 @@
         </transition>
         <main>
             <table>
-                <tr v-for="song in popular">
-                    <td>
-                        <img v-if="song.song.image_small" :src="song.song.image_small">
-                        <div v-else class="img-placeholder"></div>
-                    </td>
-                    <td>{{song.song.title}}</td>
-                    <td>{{song.song.artist}}</td>
-                    <td>{{song.count}}</td>
-                </tr>
+                <template v-for="song in popular">
+                    <tr v-on:click="toogleDetails($event,song.song.id)" class="clickable">
+                        <td>
+                            <img v-if="song.song.image_small" :src="song.song.image_small">
+                            <div v-else class="imgPlaceholder"></div>
+                        </td>
+                        <td>
+                            {{song.song.title}}
+                            <router-link :to="{ name: 'DetailView',params:{channel:channel, songId:song.song.id} }"
+                                         replace style="display: none;">{{song.song.title}}
+                            </router-link>
+                        </td>
+                        <td>{{song.song.artist}}</td>
+                        <td>{{song.count}}</td>
+                    </tr>
+                    <tr v-if="parseInt($route.params.songId) === song.song.id">
+                        <td colspan="4" class="detailWrapper">
+                            <router-view :songs="songs"
+                                         :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"
+                                         :momentDate="momentDate" :dateType="dateType">
+                                <!-- here the ItemModal component will be rendered -->
+                            </router-view>
+                        </td>
+                    </tr>
+                </template>
             </table>
             <div id="loadMore" role="button" tabindex="0" v-on:click="getAdditional" v-on:keyup.enter="getAdditional"
                  v-if="showMore &&channelData&&channelData.has_data">
@@ -70,6 +86,7 @@
                 <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
             </div>
         </main>
+
         <info v-if="channelData"
               :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"></info>
     </div>
@@ -94,7 +111,7 @@
         data() {
             return {
                 channels: [],
-                popular: [],
+                songs: [],
                 offset: 0,
                 showMore: true,
                 httpError: false,
@@ -114,7 +131,21 @@
             },
             momentDate: function () {
                 return moment(this.date);
+            },
+            popular: function () {
+                function compare(a, b) {
+                    if (a.order < b.order)
+                        return -1;
+                    if (a.order > b.order)
+                        return 1;
+                    return 0;
+                }
+
+                let songArray = Object.values(this.songs);
+                console.info(songArray);
+                return songArray.sort(compare);
             }
+
         },
         methods: {
             getChannels: function () {
@@ -138,7 +169,7 @@
                 this.httpError = false;
 
                 if (!this.channelData || !this.channelData.has_data) {
-                    this.popular = [];
+                    this.songs = [];
                     return false;
                 }
                 let vm = this;
@@ -150,8 +181,8 @@
                 })
                     .then(function (response) {
                         vm.offset += 10;
-                        vm.popular = response.data;
-                        if (response.data.length < 10) {
+                        vm.songs = response.data;
+                        if (Object.keys(response.data).length < 10) {
                             vm.showMore = false;
                         }
 
@@ -172,8 +203,8 @@
                 })
                     .then(function (response) {
                         vm.offset += 10;
-                        vm.popular = vm.popular.concat(response.data);
-                        if (response.data.length < 10) {
+                        vm.songs = Object.assign({}, vm.songs, response.data);
+                        if (Object.keys(response.data).length < 10) {
                             vm.showMore = false;
                         }
                     })
@@ -220,6 +251,14 @@
             },
             toogleVisibility: function () {
                 this.showDate = !this.showDate;
+            },
+            toogleDetails: function ($event, songId) {
+                console.info($event);
+                if (this.$route.name !== "DetailView" || this.$route.params.songId !== songId) {
+                    this.$router.replace({name: 'DetailView', params: {channel: this.channel, songId: songId}});
+                } else {
+                    this.$router.replace({name: 'List', params: {channel: this.channel}});
+                }
             }
         },
         watch: {
@@ -318,11 +357,14 @@
 
     table {
         margin: 0;
-        img, .img-placeholder {
+        img, .imgPlaceholder {
             width: 36px;
             height: 36px;
             background-color: #eee;
             display: block;
+        }
+        tr.clickable {
+            cursor: pointer;
         }
     }
 
@@ -348,29 +390,37 @@
     }
 
     #date {
-        background-color: #eee;
-        align-items: center;
         .vdp-datepicker__calendar {
             margin-right: 0;
             margin-left: auto;
         }
-        display: flex;
-        flex-direction: row;
-        > div {
-            width: 50%;
-            padding: 0 15px;
-        }
         @media (max-width: 700px) {
-            flex-direction: column;
             > div {
                 .vdp-datepicker {
                     margin: 0 auto;
 
                 }
+            }
+        }
+    }
+
+    .customRow {
+        background-color: #eee;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        > div {
+            width: 50%;
+            padding: 0 15px !important;
+        }
+        @media (max-width: 700px) {
+            flex-direction: column;
+            > div {
                 width: 100%;
                 padding: 15px 0 15px 15px;
             }
         }
+
     }
 
     .expand-enter-active, .expand-leave-active {
