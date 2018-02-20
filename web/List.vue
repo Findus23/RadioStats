@@ -264,6 +264,9 @@
                 document.title = "Radiostats - " + this.channelData.stationname;
                 this.getPopular();
             },
+            '$route.name': function (id) {
+                document.title = "Radiostats - " + this.channelData.stationname;
+            },
             dateType: function () {
                 this.updateSelection();
                 this.getPopular();
