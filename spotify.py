@@ -1,3 +1,4 @@
+import re
 import sys
 from time import sleep
 
@@ -15,8 +16,14 @@ if len(sys.argv) > 1:
 else:
     limit = 50
 
-for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)).limit(limit):
-    song.title=song.title.replace("+"," ")
+query = Song.select().where((Song.show == 0))
+if not len(sys.argv) > 2 or sys.argv[2] != "force":
+    query = query.where(Song.spotify_data.is_null())
+else:
+    print("fetching empty")
+    query = query.where(Song.spotify_data == 0)
+for song in query.limit(limit):
+    song.title = song.title.replace("+", " ")
     print(song.title)
     if song.artist.isupper():
         song.artist = song.artist.title()
@@ -24,7 +31,9 @@ for song in Song.select().where((Song.spotify_data.is_null()) & (Song.show == 0)
         song.title = song.title.title()
     print(song.id)
     sleep(0.1)
-    results = sp.search(q='title:' + song.title + ' artist:' + song.artist, type='track', limit=1)
+    searchtitle = re.sub("[\(\[].*?[\)\]]", "", song.title)
+    searchartist = song.artist.replace("&", "").replace("Feat.", "")
+    results = sp.search(q='title:' + searchtitle + ' artist:' + searchartist, type='track', limit=1)
     if len(results["tracks"]["items"]) == 0:
         song.spotify_data = False
     else:
