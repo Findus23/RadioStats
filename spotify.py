@@ -17,11 +17,12 @@ else:
     limit = 50
 
 query = Song.select().where((Song.show == 0))
-if not len(sys.argv) > 2 or sys.argv[2] != "force":
+if not len(sys.argv) > 3 or sys.argv[2] != "force":
     query = query.where(Song.spotify_data.is_null())
 else:
-    print("fetching empty")
-    query = query.where(Song.spotify_data == 0)
+    starting = int(sys.argv[2])
+    print("fetching empty starting from {id}".format(id=starting))
+    query = query.where((Song.spotify_data == 0) & (Song.id >= starting))
 for song in query.limit(limit):
     song.title = song.title.replace("+", " ")
     print(song.title)
