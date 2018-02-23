@@ -42,8 +42,6 @@ def add_entry(time, artist, title):
 
 
 for channel in Channel.select():
-    if channel.shortname != "kht":
-        continue
     if channel.has_data:
         if channel.shortname == "kht":
             pars = kronehit

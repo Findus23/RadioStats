@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from time import sleep
 
+import pytz
 import requests
 
 headers = {
@@ -36,7 +37,7 @@ def string_to_time(timestring):
 
     :rtype: datetime.time
     """
-    return datetime.strptime(timestring, "%H:%M:%S").utcnow().time()
+    return datetime.strptime(timestring, "%H:%M:%S").time()
 
 
 def time_to_date(time):
@@ -52,7 +53,10 @@ def time_to_date(time):
     if 0 <= current_hour <= 3 and 22 <= time_hour <= 24:
         day = datetime.today() - timedelta(days=1)
 
-    return datetime.combine(day.date(), time)
+    local = datetime.combine(day.date(), time)
+    tz = pytz.timezone("Europe/Vienna")
+    local_dt = tz.localize(local)
+    return local_dt.astimezone(pytz.utc)
 
 
 def fetch(url, json=False):
