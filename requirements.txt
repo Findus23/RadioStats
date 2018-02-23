@@ -9,6 +9,7 @@ Jinja2==2.10
 MarkupSafe==1.0
 mysqlclient==1.3.12
 peewee==3.0.18
+pytz==2018.3
 requests==2.18.4
 spotipy==2.4.4
 urllib3==1.22
