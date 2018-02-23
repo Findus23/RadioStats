@@ -36,7 +36,9 @@ for song in query.limit(limit):
     results = sp.search(q='title:' + searchtitle + ' artist:' + searchartist, type='track', limit=1)
     if len(results["tracks"]["items"]) == 0:
         song.spotify_data = False
+        print("not found")
     else:
+        print("found")
         track = results["tracks"]["items"][0]
         song.spotify_url = track["external_urls"]["spotify"]
         song.preview_url = track["preview_url"]
