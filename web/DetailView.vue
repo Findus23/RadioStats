@@ -121,6 +121,7 @@
         .spotifyLink {
             display: inline-block;
             width: 250px;
+            margin-top: 5px;
             &:hover {
                 color: #1ED760 !important;
             }

@@ -48,6 +48,12 @@
             </div>
         </transition>
         <main>
+            <div id="httpError" v-if="httpError" class="message">
+                <strong>Beim Laden ist ein Fehler aufgetreten:</strong> {{httpError.message}}
+            </div>
+            <div id="noData" class="message" v-if="(!channelData||!channelData.has_data)&&!httpError">
+                <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
+            </div>
             <table>
                 <template v-for="song in popular">
                     <tr v-on:click="toogleDetails($event,song.song.id)" class="clickable">
@@ -78,12 +84,6 @@
             <div id="loadMore" role="button" tabindex="0" v-on:click="getAdditional" v-on:keyup.enter="getAdditional"
                  v-if="showMore &&channelData&&channelData.has_data">
                 Mehr anzeigen
-            </div>
-            <div id="httpError" v-if="httpError" class="message">
-                <strong>Beim Laden ist ein Fehler aufgetreten:</strong> {{httpError.message}}
-            </div>
-            <div id="noData" class="message" v-if="(!channelData||!channelData.has_data)&&!httpError">
-                <strong>Keine Daten!</strong> Leider gibt es für diesen Sender noch keine Daten.
             </div>
         </main>
 
