@@ -1,12 +1,12 @@
 # Blog configuration values.
 
 from flask import Flask
-from peewee import MySQLDatabase
-from playhouse.flask_utils import FlaskDB, get_object_or_404, object_list
+from playhouse.flask_utils import FlaskDB
+from playhouse.pool import PooledMySQLDatabase
 
 import config
 
-DATABASE = MySQLDatabase("radio", **config.db)
+DATABASE = PooledMySQLDatabase("radio", **config.db)
 
 
 # Create a Flask WSGI app and configure it using values from the module.
@@ -16,4 +16,3 @@ app.config.from_object(__name__)
 flask_db = FlaskDB(app)
 
 db = flask_db.database
-

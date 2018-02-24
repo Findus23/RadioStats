@@ -99,7 +99,7 @@ def plays(channel, song_id):
     start, end = get_range(date, date_type)
     get = Play.select(Play.time) \
         .join(Channel) \
-        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end)))\
+        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end))) \
         .order_by(Play.time.desc())
     return query_to_response(get, exclude=[Play.channel, Play.song, Play.id], list="time", limit=False)
 
