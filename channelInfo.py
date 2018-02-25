@@ -232,5 +232,12 @@ channels = {
         "cHasData": True,
         "cPrimaryColor": "#003e88",
         "cSecondaryColor": "#e6007e"
+    },
+    "eng": {
+        "shortname": "eng",
+        "stationname": "Engergy Wien/Nö/Bgld",
+        "cHasData": True,
+        "cPrimaryColor": "#000000",
+        "cSecondaryColor": "#E2001A"
     }
 }

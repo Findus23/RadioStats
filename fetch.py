@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from models import *
-from parser import kronehit, aas, orf, ara
+from parser import kronehit, aas, orf, ara, eng
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
@@ -49,6 +49,8 @@ for channel in Channel.select():
             pars = aas
         elif channel.shortname == "ara":
             pars = ara
+        elif channel.shortname == "eng":
+            pars = eng
         else:
             pars = orf
 

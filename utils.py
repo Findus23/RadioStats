@@ -54,8 +54,12 @@ def time_to_date(time):
         day = datetime.today() - timedelta(days=1)
 
     local = datetime.combine(day.date(), time)
+    return local_to_utc(local)
+
+
+def local_to_utc(date):
     tz = pytz.timezone("Europe/Vienna")
-    local_dt = tz.localize(local)
+    local_dt = tz.localize(date)
     return local_dt.astimezone(pytz.utc)
 
 
