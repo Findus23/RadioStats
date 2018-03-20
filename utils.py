@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime, timedelta
 from time import sleep
 
@@ -65,6 +66,9 @@ def local_to_utc(date):
 
 def fetch(url, json=False):
     req = requests.get(url, headers=headers)
+    if req.status_code != 200:
+        print("URL failed to fetch: {status} {url}".format(status=req.status_code, url=url), file=sys.stderr)
+        return False
     if json:
         return req.json()
     return req.text
