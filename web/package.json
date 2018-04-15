@@ -15,6 +15,7 @@
     "markdown-it": "^8.4.0",
     "milligram": "git+https://github.com/Findus23/milligram.git",
     "moment": "^2.20.1",
+    "node-vibrant": "^3.0.0",
     "normalize.css": "^8.0.0",
     "vue": "^2.5.13",
     "vue-head": "^2.0.12",
