@@ -28,7 +28,7 @@
         <transition name="expand">
             <div id="date" class="customRow" v-if="showDate">
                 <div>
-                    <datepicker language="de" v-model="date" :mondayFirst="true" :inline="true"
+                    <datepicker :language="de" v-model="date" :mondayFirst="true" :inline="true"
                                 :highlighted="highlighted"></datepicker>
 
                 </div>
@@ -97,6 +97,7 @@
     import moment from "moment";
     import "moment/locale/de-at";
     import Datepicker from 'vuejs-datepicker';
+    import {de} from 'vuejs-datepicker/dist/locale';
     import Info from "./Info.vue";
 
     if (process.env.NODE_ENV === "production") {
@@ -121,7 +122,8 @@
                     from: new Date(),
                     to: new Date(),
                 },
-                showDate: false
+                showDate: false,
+                de: de
             };
         },
         props: ["channel"],
@@ -387,7 +389,7 @@
     }
 
     #httpError {
-        background-color: $warning;
+        background-color: #f0ad4e;
     }
 
     #date {

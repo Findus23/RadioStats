@@ -4,7 +4,8 @@ let CleanWebpackPlugin = require('clean-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let SriPlugin = require('webpack-subresource-integrity');
 let CompressionPlugin = require('compression-webpack-plugin');
-let ExtractTextPlugin = require("extract-text-webpack-plugin");
+let MiniCssExtractPlugin = require("mini-css-extract-plugin");
+let VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
     entry: {polyfill: "@babel/polyfill", app: './main.js'},
@@ -14,6 +15,7 @@ module.exports = {
         filename: '[name]-build-[hash].js',
         crossOriginLoading: "anonymous"
     },
+    mode: process.env.NODE_ENV,
     module: {
         rules: [
             {
@@ -29,12 +31,14 @@ module.exports = {
                         img: 'src',
                         image: 'xlink:href'
                     },
-                    postcss: [require('autoprefixer')()]
                 }
             },
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: file => (
+                    /node_modules/.test(file) &&
+                    !/\.vue\.js/.test(file)
+                ),
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -59,7 +63,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[name].[ext]?hash=[hash]'
+                            // name: '[name].[ext]?hash=[hash]'
                         }
                     },
                     {
@@ -72,6 +76,44 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.yaml$/,
+                loader: 'yml-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    process.env.NODE_ENV !== 'production'
+                        ? 'vue-style-loader'
+                        : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: [require('autoprefixer')()]
+                        }
+                    },
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    process.env.NODE_ENV !== 'production'
+                        ? 'vue-style-loader'
+                        : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {importLoaders: 1}
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: [require('autoprefixer')()]
+                        }
+                    },
+                ]
             }
         ]
     },
@@ -95,12 +137,18 @@ module.exports = {
             hashFuncNames: ['sha256'],
             enabled: process.env.NODE_ENV === 'production',
         }),
-        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/)
-    ]
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/),
+
+        new VueLoaderPlugin()
+    ],
 };
 
 if (process.env.NODE_ENV === 'production') {
+    module.exports.optimization = {
+        splitChunks: {
+            name: "commons"
+        }
+    };
     module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
@@ -115,18 +163,15 @@ if (process.env.NODE_ENV === 'production') {
                 NODE_ENV: '"production"'
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: {
-                warnings: false
-            }
-        }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        new ExtractTextPlugin("style-[hash].css"),
+        new MiniCssExtractPlugin("style-[hash].css"),
         new CompressionPlugin({
-            test: /\.(js|css)/
+            test: /\.(js|css|html)/
         }),
+        // new SriPlugin({
+        //     hashFuncNames: ['sha256'],
+        // }),
     ]);
 }
