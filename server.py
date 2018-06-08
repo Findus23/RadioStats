@@ -20,7 +20,6 @@ def query_to_response(query, limit=10, key=False, sort=False, offset=None, list=
     """
     if limit:
         query = query.limit(limit)
-    print(query.sql())
     data = {} if key is not False else []
     order = int(offset) if offset else 0
     for i in query:
