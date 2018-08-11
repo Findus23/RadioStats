@@ -173,18 +173,31 @@
                     this.songs = [];
                     return false;
                 }
-                let vm = this;
                 axios.get(baseURL + this.channel, {
                     params: {
-                        date: vm.momentDate.format("YYYY-MM-DD"),
-                        dateType: vm.dateType
+                        date: this.momentDate.format("YYYY-MM-DD"),
+                        dateType: this.dateType
                     }
                 })
-                    .then(function (response) {
-                        vm.offset += 10;
-                        vm.songs = response.data;
+                    .then(response => {
+                        this.offset += 10;
+                        this.songs = response.data;
                         if (Object.keys(response.data).length < 10) {
-                            vm.showMore = false;
+                            this.showMore = false;
+                        }
+                        let urlsongID = parseInt(this.$route.params.songId);
+                        if (urlsongID && typeof this.songs[urlsongID] === "undefined") {
+                            axios.get(baseURL + this.channel + "/details/" + urlsongID, {
+                                params: {
+                                    date: this.momentDate.format("YYYY-MM-DD"),
+                                    dateType: this.dateType
+                                }
+                            })
+                                .then(response => {
+                                    this.$set(this.songs, urlsongID, response.data);
+                                });
+
+                            console.log("Song not in view: " + urlsongID);
                         }
 
                     })
