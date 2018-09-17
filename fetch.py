@@ -1,7 +1,13 @@
 from datetime import timedelta
 
+from raven import Client
+
+import config
 from models import *
-from parser import kronehit, aas, orf, ara, eng
+from parser import kronehit, aas, orf, ara
+
+if config.sentryDSN:
+    client = Client(config.sentryDSN)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
