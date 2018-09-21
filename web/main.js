@@ -7,11 +7,11 @@ import {init, Integrations} from '@sentry/browser';
 
 init({
     dsn: 'https://91af780499634f98a17afe160c6ace89@sentry.lw1.at/12',
-    integrations: [new Integrations.Vue({Vue})]
+    integrations: [new Integrations.Vue({Vue})],
+    release: COMMIT_HASH
 });
 
 Vue.use(VueHead);
-throw new Error()
 let matomo = new MatomoTracker;
 matomo.init();
 

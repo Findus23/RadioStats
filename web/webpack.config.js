@@ -6,6 +6,9 @@ let SriPlugin = require('webpack-subresource-integrity');
 let CompressionPlugin = require('compression-webpack-plugin');
 let MiniCssExtractPlugin = require("mini-css-extract-plugin");
 let VueLoaderPlugin = require('vue-loader/lib/plugin');
+const SentryCliPlugin = require('@sentry/webpack-plugin');
+
+const commitHash = require('child_process').execSync('git rev-parse HEAD').toString().replace(/\n$/, '');
 
 module.exports = {
     entry: {polyfill: "@babel/polyfill", app: './main.js'},
@@ -161,7 +164,8 @@ if (process.env.NODE_ENV === 'production') {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"'
-            }
+            },
+            COMMIT_HASH: JSON.stringify(commitHash),
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
@@ -169,6 +173,10 @@ if (process.env.NODE_ENV === 'production') {
         new MiniCssExtractPlugin("style-[hash].css"),
         new CompressionPlugin({
             test: /\.(js|css|html)/
+        }),
+        new SentryCliPlugin({
+            include: '../dist/',
+            configFile: 'sentry.properties',
         }),
         // new SriPlugin({
         //     hashFuncNames: ['sha256'],
