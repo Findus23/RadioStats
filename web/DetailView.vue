@@ -28,11 +28,13 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import axios from "axios";
-    import moment from "moment";
+    import * as moment from 'moment';
     import "moment/locale/de-at";
+    // @ts-ignore
     import * as Vibrant from 'node-vibrant';
+    import Vue from 'vue';
 
     if (process.env.NODE_ENV === "production") {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
@@ -40,7 +42,7 @@
 
     const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
-    export default {
+    export default Vue.extend({
         name: "detailview",
         data() {
             return {
@@ -104,7 +106,7 @@
                 document.title = "Radiostats - " + this.song.song.title + " - " + this.song.song.artist;
             },
         }
-    };
+    });
 </script>
 
 <style lang="scss">

@@ -1,16 +1,20 @@
 <template>
     <footer :style="color">
         <div><a href="https://lw1.at/de/impressum">Impressum</a></div>
-        <div><a class="small" href="https://developer.spotify.com/">Albumcover und Probehören mithife von Spotify</a></div>
+        <div><a class="small" href="https://developer.spotify.com/">Albumcover und Probehören mithife von Spotify</a>
+        </div>
         <div><a href="https://lw1.at/">Andere Projekte</a></div>
     </footer>
 </template>
 
-<script>
-    export default {
-        name: "info",
-        props: ["color"],
+<script lang="ts">
+    import Vue from 'vue';
 
+    export default Vue.extend({
+        name: "info",
+        props: {
+            color: String
+        },
     };
 </script>
 

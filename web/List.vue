@@ -92,13 +92,16 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import axios from "axios";
     import moment from "moment";
     import "moment/locale/de-at";
+    // @ts-ignore
     import Datepicker from 'vuejs-datepicker';
+    // @ts-ignore
     import {de} from 'vuejs-datepicker/dist/locale';
     import Info from "./Info.vue";
+    import Vue from 'vue';
 
     if (process.env.NODE_ENV === "production") {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
@@ -106,7 +109,7 @@
 
     const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
-    export default {
+    export default Vue.extend({
         components: {Datepicker, Info},
         name: 'list',
         data() {
@@ -266,7 +269,7 @@
             toogleVisibility: function () {
                 this.showDate = !this.showDate;
             },
-            toogleDetails: function ($event, songId) {
+            toogleDetails: function ($event, songId: number) {
                 if (this.$route.name !== "DetailView" || this.$route.params.songId !== songId) {
                     this.$router.replace({name: 'DetailView', params: {channel: this.channel, songId: songId}});
                 } else {
@@ -296,7 +299,7 @@
             this.getChannels();
             this.updateSelection();
         }
-    };
+    });
 </script>
 
 <style lang="scss">

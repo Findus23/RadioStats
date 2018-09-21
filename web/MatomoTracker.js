@@ -1,25 +1,34 @@
-export default class MatomoTracker {
-    init() {
+var MatomoTracker = /** @class */ (function () {
+    function MatomoTracker() {
+    }
+    MatomoTracker.prototype.init = function () {
+        // @ts-ignore
         if (typeof _paq === 'undefined') { // should only occur with hot reloading
-            let _paq = _paq || [];
-            _paq.push(['enableHeartBeatTimer']);
+            // @ts-ignore
+            var _paq_1 = _paq_1 || [];
+            _paq_1.push(['enableHeartBeatTimer']);
             if (process.env.NODE_ENV === "production") {
-                _paq.push(["setDoNotTrack", true]);
+                _paq_1.push(["setDoNotTrack", true]);
             }
-            (function() {
-                let u = (process.env.NODE_ENV === "production") ? "https://matomo.lw1.at/" : "//localhost/piwik/";
-                _paq.push(['setTrackerUrl', u + 'piwik.php']);
-                _paq.push(['setSiteId', (process.env.NODE_ENV === "production") ? 15 : 6]);
-                let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            (function () {
+                var u = (process.env.NODE_ENV === "production") ? "https://matomo.lw1.at/" : "//localhost/piwik/";
+                _paq_1.push(['setTrackerUrl', u + 'piwik.php']);
+                _paq_1.push(['setSiteId', (process.env.NODE_ENV === "production") ? 15 : 6]);
+                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
                 g.type = 'text/javascript';
                 g.async = true;
                 g.defer = true;
                 g.src = u + 'piwik.js';
+                // @ts-ignore
                 s.parentNode.insertBefore(g, s);
             })();
-            window._paq = _paq;
-        } else {
+            // @ts-ignore
+            window._paq = _paq_1;
+        }
+        else {
             console.info("Piwik already initialized");
         }
-    }
-}
+    };
+    return MatomoTracker;
+}());
+export default MatomoTracker;

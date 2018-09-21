@@ -8,7 +8,7 @@ let MiniCssExtractPlugin = require("mini-css-extract-plugin");
 let VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
-    entry: {polyfill: "@babel/polyfill", app: './main.js'},
+    entry: {polyfill: "@babel/polyfill", app: './main.ts'},
     output: {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/',
@@ -31,6 +31,14 @@ module.exports = {
                         img: 'src',
                         image: 'xlink:href'
                     },
+                }
+            },
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/],
                 }
             },
             {
@@ -116,6 +124,9 @@ module.exports = {
                 ]
             }
         ]
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.vue', '.json']
     },
     devServer: {
         historyApiFallback: true,
