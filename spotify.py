@@ -39,7 +39,7 @@ for song in query.limit(limit):
     sleep(0.1)
     searchtitle = re.sub("[\(\[].*?[\)\]]", "", song.title)
     searchartist = song.artist.replace("&", "").replace("Feat.", "")
-    results = sp.search(q='title:' + searchtitle + ' artist:' + searchartist, type='track', limit=1)
+    results = sp.search(q=searchtitle + ' ' + searchartist, type='track', limit=1)
     if len(results["tracks"]["items"]) == 0:
         song.spotify_data = False
         print("not found")
