@@ -57,6 +57,8 @@ for channel in Channel.select():
             pars = ara
         elif channel.shortname == "eng":
             continue
+        elif channel.shortname == "all":
+            continue
         else:
             pars = orf
 
