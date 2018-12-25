@@ -114,7 +114,7 @@ def plays(channel, song_id):
 
 @app.route('/api/<channel>/details/<song_id>')
 def details(channel, song_id):
-    get = Song.select() \
+    song_get = Song.select() \
         .where(Song.id == song_id)
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
@@ -124,7 +124,7 @@ def details(channel, song_id):
     if channel != "all":
         get = get.where(Channel.shortname == channel)
     count = get.count()
-    response = jsonify({"order": -1, "count": count, "song": model_to_dict(get.get())})
+    response = jsonify({"order": -1, "count": count, "song": model_to_dict(song_get.get())})
     if __name__ == '__main__':
         response.headers.add('Access-Control-Allow-Origin', '*')
     return response
