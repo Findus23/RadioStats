@@ -8,6 +8,12 @@ from app import app
 from models import *
 
 
+def add_cors(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
 def query_to_response(query, limit=10, key=False, sort=False, offset=None, list=None, **kwargs):
     """
 
@@ -83,9 +89,10 @@ def popular(channel):
     start, end = get_range(date, date_type)
     get = Play.select(Play.song, fn.Count(SQL('*')).alias("count")) \
         .join(Channel).switch(Play).join(Song) \
-        .where((Song.show == 0) & (Channel.shortname == channel) & (
-        Play.time.between(start, end))) \
-        .group_by(Play.song).order_by(SQL('count').desc())
+        .where((Song.show == 0) & (Play.time.between(start, end)))
+    if channel != "all":
+        get = get.where(Channel.shortname == channel)
+    get = get.group_by(Play.song).order_by(SQL('count').desc())
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
     return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id], key="song.id",
@@ -98,8 +105,10 @@ def plays(channel, song_id):
     start, end = get_range(date, date_type)
     get = Play.select(Play.time) \
         .join(Channel) \
-        .where((Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end))) \
-        .order_by(Play.time.desc())
+        .where((Play.song == song_id) & (Play.time.between(start, end)))
+    if channel != "all":
+        get = get.where(Channel.shortname == channel)
+    get = get.order_by(Play.time.desc())
     return query_to_response(get, exclude=[Play.channel, Play.song, Play.id], list="time", limit=False)
 
 
@@ -109,9 +118,12 @@ def details(channel, song_id):
         .where(Song.id == song_id)
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
-    count = Play.select().join(Channel).where(
-        (Play.song == song_id) & (Channel.shortname == channel) & (Play.time.between(start, end))
-    ).count()
+    get = Play.select().join(Channel).where(
+        (Play.song == song_id) & (Play.time.between(start, end))
+    )
+    if channel != "all":
+        get = get.where(Channel.shortname == channel)
+    count = get.count()
     response = jsonify({"order": -1, "count": count, "song": model_to_dict(get.get())})
     if __name__ == '__main__':
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -120,4 +132,5 @@ def details(channel, song_id):
 
 if __name__ == '__main__':
     app.debug = True
+    app.after_request(add_cors)
     app.run()

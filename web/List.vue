@@ -128,13 +128,13 @@
         },
         props: ["channel"],
         computed: {
-            channelData: function () {
+            channelData: function() {
                 return this.channels[this.channel];
             },
-            momentDate: function () {
+            momentDate: function() {
                 return moment(this.date);
             },
-            popular: function () {
+            popular: function() {
                 function compare(a, b) {
                     if (a.order < b.order)
                         return -1;
@@ -149,22 +149,24 @@
 
         },
         methods: {
-            getChannels: function () {
-                let vm = this;
+            getChannels: function() {
                 axios.get(baseURL, {
                     params: {}
                 })
-                    .then(function (response) {
-                        vm.channels = response.data;
-                        document.title = "Radiostats - " + vm.channels[vm.channel].stationname;
-                        vm.getPopular();
+                    .then(response => {
+                        const all = response.data["all"];
+                        this.channels = response.data;
+                        delete response.data["all"];
+                        response.data["all"]=all;
+                        document.title = "Radiostats - " + this.channels[this.channel].stationname;
+                        this.getPopular();
 
                     })
-                    .catch(function (error) {
-                        vm.httpError = error;
+                    .catch(error => {
+                        this.httpError = error;
                     });
             },
-            getPopular: function () {
+            getPopular: function() {
                 this.offset = 0;
                 this.showMore = true;
                 this.httpError = false;
@@ -201,40 +203,38 @@
                         }
 
                     })
-                    .catch(function (error) {
-                        vm.httpError = error;
+                    .catch(error => {
+                        this.httpError = error;
                     });
             },
-            getAdditional: function () {
-                let vm = this;
-
+            getAdditional: function() {
                 axios.get(baseURL + this.channel, {
                     params: {
-                        offset: vm.offset,
-                        date: vm.momentDate.format("YYYY-MM-DD"),
-                        dateType: vm.dateType
+                        offset: this.offset,
+                        date: this.momentDate.format("YYYY-MM-DD"),
+                        dateType: this.dateType
                     }
                 })
-                    .then(function (response) {
-                        vm.offset += 10;
-                        vm.songs = Object.assign({}, vm.songs, response.data);
+                    .then(response => {
+                        this.offset += 10;
+                        this.songs = Object.assign({}, this.songs, response.data);
                         if (Object.keys(response.data).length < 10) {
-                            vm.showMore = false;
+                            this.showMore = false;
                         }
                     })
-                    .catch(function (error) {
-                        vm.httpError = error;
+                    .catch(error => {
+                        this.httpError = error;
                     });
 
             },
-            icon: function (id) {
+            icon: function(id) {
                 if (id === "fm4" || id === "oe3" || id === "kht") {
                     return id + ".svg";
                 } else {
                     return id + ".png";
                 }
             },
-            updateSelection: function () {
+            updateSelection: function() {
                 let from, to;
                 let date = moment(this.date);
                 if (this.dateType !== "alltime") {
@@ -251,7 +251,7 @@
                     "to": to.toDate(),
                 };
             },
-            formatDate: function () {
+            formatDate: function() {
                 switch (this.dateType) {
                     case "day":
                         return "am " + this.momentDate.format("D. MMMM");
@@ -263,10 +263,10 @@
                         return "im gesamten Zeitraum";
                 }
             },
-            toogleVisibility: function () {
+            toogleVisibility: function() {
                 this.showDate = !this.showDate;
             },
-            toogleDetails: function ($event, songId) {
+            toogleDetails: function($event, songId) {
                 if (this.$route.name !== "DetailView" || this.$route.params.songId !== songId) {
                     this.$router.replace({name: 'DetailView', params: {channel: this.channel, songId: songId}});
                 } else {
@@ -275,24 +275,24 @@
             }
         },
         watch: {
-            channel: function () {
+            channel: function() {
                 document.title = "Radiostats - " + this.channelData.stationname;
                 this.getPopular();
             },
-            '$route.name': function (id) {
+            '$route.name': function(id) {
                 document.title = "Radiostats - " + this.channelData.stationname;
             },
-            dateType: function () {
+            dateType: function() {
                 this.updateSelection();
                 this.getPopular();
             },
-            date: function () {
+            date: function() {
                 this.updateSelection();
                 this.getPopular();
             }
 
         },
-        mounted: function () {
+        mounted: function() {
             this.getChannels();
             this.updateSelection();
         }
@@ -314,20 +314,24 @@
     header {
         padding: 2.5rem;
         transition: color .2s, background-color .2s;
+
         h2, div {
             font-weight: bold;
             text-align: center;
             margin: 0;
         }
+
         div {
             cursor: pointer;
             font-size: 3.0rem;
             line-height: 1.3;
+
             svg {
                 fill: currentColor;
                 width: 32px;
                 height: 18.66px;
                 transition: transform .3s;
+
                 &.disabled {
                     transform: rotate(-90deg);
 
@@ -351,19 +355,23 @@
                 margin: 10px 10px;
             }
         }
+
         a {
             /*border-bottom: solid 5px;*/
 
             &.router-link-active {
                 border-bottom: solid 5px;
             }
+
             display: block;
+
             img {
                 margin-bottom: 5px;
                 display: block;
                 width: 40px;
                 height: 40px;
                 transition: filter .2s;
+
                 &.noData:not(:hover) {
                     filter: grayscale(0.7);
                 }
@@ -373,12 +381,14 @@
 
     table {
         margin: 0;
+
         img, .imgPlaceholder {
             width: 36px;
             height: 36px;
             background-color: #eee;
             display: block;
         }
+
         tr.clickable {
             cursor: pointer;
         }
@@ -390,6 +400,7 @@
         text-align: center;
         cursor: pointer;
         transition: background-color .2s;
+
         &:hover {
             background-color: #eee;
         }
@@ -410,6 +421,7 @@
             margin-right: 0;
             margin-left: auto;
         }
+
         @media (max-width: 700px) {
             > div {
                 .vdp-datepicker {
@@ -425,10 +437,12 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+
         > div {
             width: 50%;
             padding: 0 15px !important;
         }
+
         @media (max-width: 700px) {
             flex-direction: column;
             > div {

@@ -239,5 +239,12 @@ channels = {
         "cHasData": True,
         "cPrimaryColor": "#000000",
         "cSecondaryColor": "#E2001A"
+    },
+    "all": {
+        "shortname": "all",
+        "stationname": "Alle",
+        "cHasData": True,
+        "cPrimaryColor": "black",
+        "cSecondaryColor": "white"
     }
 }
