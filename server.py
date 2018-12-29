@@ -130,6 +130,30 @@ def details(channel, song_id):
     return response
 
 
+@app.route('/api/stats')
+def stats():
+    total_num_plays = Play.select().count()
+    total_num_unique_songs = Song.select().where(Song.show == 0).count()
+    total_num_unique_shows = Song.select().where(Song.show == 1).count()
+
+    per_channel = {}
+    for channel in Channel.select().where(Channel.has_data == 1):
+        if channel.shortname == "all":
+            continue
+        count = Song.select().join(Play).where((Play.channel == channel) & (Song.show == 0)).group_by(Song.id).count()
+        per_channel[channel.stationname] = count
+
+    per_channel["#notice"] = "I am not 100% sure these numbers are calculated correctly"
+    response = jsonify({
+        "number_of_total_plays": total_num_plays,
+        "number_of_unique_songs": total_num_unique_songs,
+        "number_of_unique_shows": total_num_unique_shows,
+        "number_of_unique_songs_per_channel": per_channel
+
+    })
+    return response
+
+
 if __name__ == '__main__':
     app.debug = True
     app.after_request(add_cors)
