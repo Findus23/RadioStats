@@ -16,7 +16,8 @@ module.exports = {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/',
         filename: '[name]-build-[hash].js',
-        crossOriginLoading: "anonymous"
+        crossOriginLoading: "anonymous",
+        globalObject: 'this' // https://github.com/webpack-contrib/worker-loader/issues/166
     },
     mode: process.env.NODE_ENV,
     module: {
@@ -79,6 +80,11 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.worker.js$/,
+                loader: 'worker-loader',
+                options: { /* ... */ }
             },
             {
                 test: /\.yaml$/,

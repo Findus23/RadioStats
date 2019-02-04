@@ -54,20 +54,22 @@
             document.title = "Radiostats - " + this.song.song.title + " - " + this.song.song.artist;
         },
         methods: {
-            getPlays: function () {
+            getPlays: function() {
                 let vm = this;
                 if (this.song.song.image_small) {
                     let v = Vibrant.from(this.song.song.image_small);
                     v.getPalette((err, palette) => {
-                        console.warn(err);
-                        // console.log('%c LightVibrant', 'background: ' + palette.LightVibrant.getHex());
-                        // console.log('%c Vibrant', 'background: ' + palette.Vibrant.getHex());
-                        // console.log('%c DarkVibrant', 'background: ' + palette.DarkVibrant.getHex());
-                        // console.log('%c LightMuted', 'background: ' + palette.LightMuted.getHex());
-                        // console.log('%c Muted', 'background: ' + palette.Muted.getHex());
-                        // console.log('%c DarkMuted', 'background: ' + palette.DarkMuted.getHex());
+                        if (err) {
+                            console.warn(err);
+                        }
+                        console.log('%c LightVibrant', 'background: ' + palette.LightVibrant.getHex());
+                        console.log('%c Vibrant', 'background: ' + palette.Vibrant.getHex());
+                        console.log('%c DarkVibrant', 'background: ' + palette.DarkVibrant.getHex());
+                        console.log('%c LightMuted', 'background: ' + palette.LightMuted.getHex());
+                        console.log('%c Muted', 'background: ' + palette.Muted.getHex());
+                        console.log('%c DarkMuted', 'background: ' + palette.DarkMuted.getHex());
                         vm.palette = {
-                            background: palette.LightMuted ? palette.LightMuted.getHex() : "",
+                            background: palette.LightVibrant? palette.LightVibrant.getHex() : "",
                             alternative: palette.DarkVibrant ? palette.DarkVibrant.getHex() : "",
                             text: palette.DarkMuted ? palette.DarkMuted.getHex() : ""
                         };
@@ -80,14 +82,14 @@
                         dateType: vm.dateType
                     }
                 })
-                    .then(function (response) {
-                        response.data.forEach(function (time) {
+                    .then(function(response) {
+                        response.data.forEach(function(time) {
                             vm.plays.push(moment(time));
                         });
                         // document.title = "Radiostats - " + vm.channels[vm.channel].stationname;
 
                     })
-                    .catch(function (error) {
+                    .catch(function(error) {
                         vm.httpError = error;
                     });
             },
@@ -99,7 +101,7 @@
         },
         components: {},
         watch: {
-            song: function () {
+            song: function() {
                 this.getPlays();
                 document.title = "Radiostats - " + this.song.song.title + " - " + this.song.song.artist;
             },
@@ -117,11 +119,13 @@
     .detailView {
         position: relative;
         background-color: #f5f5f5;
+
         img, .imgPlaceholder {
             width: 250px;
             height: 250px;
             background-color: #eee;
             display: block;
+
             div {
                 text-align: center;
                 vertical-align: middle;
@@ -130,16 +134,20 @@
                 font-weight: bold;
             }
         }
+
         > div {
             padding: 15px 15px !important;
         }
+
         audio {
             width: 250px;
         }
+
         .spotifyLink {
             display: inline-block;
             width: 250px;
             margin-top: 5px;
+
             &:hover {
                 color: #1ED760 !important;
             }
@@ -152,12 +160,14 @@
                 margin-left: 100px;
             }
         }
+
         ul {
             max-height: 250px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             list-style: none;
         }
+
         .closeButton {
             position: absolute;
             font-size: 40px;
@@ -167,6 +177,7 @@
             padding: 10px;
             cursor: pointer;
             transition: color 0.2s;
+
             &:hover {
                 color: darkgrey !important;
             }
