@@ -1,6 +1,6 @@
 let path = require('path');
 let webpack = require('webpack');
-let CleanWebpackPlugin = require('clean-webpack-plugin');
+let {CleanWebpackPlugin} = require('clean-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let SriPlugin = require('webpack-subresource-integrity');
 let CompressionPlugin = require('compression-webpack-plugin');
@@ -161,7 +161,7 @@ if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-        new CleanWebpackPlugin("../dist"),
+        new CleanWebpackPlugin(),
         new webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
