@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from flask import jsonify, request
 from playhouse.shortcuts import model_to_dict
 
-from app import app
+from app import app, cache
 from models import *
 
 
@@ -50,6 +50,7 @@ def query_to_response(query, limit=10, key=False, sort=False, offset=None, list=
 
 
 @app.route('/api/')
+@cache.cached(60 * 60 * 24)
 def index():
     return query_to_response(Channel.select(), limit=False, key="shortname")
 
@@ -84,6 +85,7 @@ def get_dates_from_request():
 
 
 @app.route('/api/<channel>')
+@cache.cached(60 * 15)
 def popular(channel):
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
@@ -104,6 +106,7 @@ def popular(channel):
 
 
 @app.route('/api/<channel>/plays/<song_id>')
+@cache.cached(60 * 15)
 def plays(channel, song_id):
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
@@ -117,6 +120,7 @@ def plays(channel, song_id):
 
 
 @app.route('/api/<channel>/details/<song_id>')
+@cache.cached(60 * 15)
 def details(channel, song_id):
     song_get = Song.select() \
         .where(Song.id == song_id)
@@ -135,6 +139,7 @@ def details(channel, song_id):
 
 
 @app.route('/api/stats')
+@cache.cached(60 * 60)
 def stats():
     total_num_plays = Play.select().count()
     total_num_unique_songs = Song.select().where(Song.show == 0).count()
