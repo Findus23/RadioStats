@@ -95,8 +95,12 @@ def popular(channel):
     get = get.group_by(Play.song).order_by(SQL('count').desc())
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
+    if request.args.get('highlimit', False):
+        limit = 1000
+    else:
+        limit = 10
     return query_to_response(get, extra_attrs=["count"], exclude=[Play.channel, Play.time, Play.id], key="song.id",
-                             sort=True, offset=request.args.get('offset'))
+                             sort=True, offset=request.args.get('offset'), limit=limit)
 
 
 @app.route('/api/<channel>/plays/<song_id>')

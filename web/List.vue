@@ -31,6 +31,12 @@
                     <datepicker :language="de" v-model="date" :mondayFirst="true" :inline="true"
                                 :highlighted="highlighted"></datepicker>
 
+                    <div v-if="showMore" v-on:click="getMany" class="getMany">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 8 8">
+                            <path d="M3 0v3h-2l3 3 3-3h-2v-3h-2zm-3 7v1h8v-1h-8z"></path>
+                        </svg>
+                    </div>
+
                 </div>
                 <div>
                     <input type="radio" id="day" value="day" v-model="dateType">
@@ -157,7 +163,7 @@
                         const all = response.data["all"];
                         this.channels = response.data;
                         delete response.data["all"];
-                        response.data["all"]=all;
+                        response.data["all"] = all;
                         document.title = "Radiostats - " + this.channels[this.channel].stationname;
                         this.getPopular();
 
@@ -207,18 +213,20 @@
                         this.httpError = error;
                     });
             },
-            getAdditional: function() {
+            getAdditional: function(many) {
+                const loadNumber = many ? 1000 : 10;
                 axios.get(baseURL + this.channel, {
                     params: {
                         offset: this.offset,
                         date: this.momentDate.format("YYYY-MM-DD"),
-                        dateType: this.dateType
+                        dateType: this.dateType,
+                        highlimit: many
                     }
                 })
                     .then(response => {
-                        this.offset += 10;
+                        this.offset += loadNumber;
                         this.songs = Object.assign({}, this.songs, response.data);
-                        if (Object.keys(response.data).length < 10) {
+                        if (Object.keys(response.data).length < loadNumber) {
                             this.showMore = false;
                         }
                     })
@@ -226,6 +234,9 @@
                         this.httpError = error;
                     });
 
+            },
+            getMany: function() {
+                this.getAdditional(true)
             },
             icon: function(id) {
                 if (id === "fm4" || id === "oe3" || id === "kht") {
@@ -463,6 +474,16 @@
     .expand-enter, .expand-leave-to {
 
         max-height: 0;
+    }
+
+    .getMany {
+        max-width: 300px;
+        margin-left: auto;
+
+        svg {
+            display: block;
+            margin: 10px auto;
+        }
     }
 
 </style>
