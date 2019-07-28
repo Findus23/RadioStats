@@ -85,7 +85,7 @@ def get_dates_from_request():
 
 
 @app.route('/api/<channel>')
-@cache.cached(60 * 15)
+@cache.cached(60 * 15, query_string=True)
 def popular(channel):
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
@@ -106,7 +106,7 @@ def popular(channel):
 
 
 @app.route('/api/<channel>/plays/<song_id>')
-@cache.cached(60 * 15)
+@cache.cached(60 * 15, query_string=True)
 def plays(channel, song_id):
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
@@ -120,7 +120,7 @@ def plays(channel, song_id):
 
 
 @app.route('/api/<channel>/details/<song_id>')
-@cache.cached(60 * 15)
+@cache.cached(60 * 15, query_string=True)
 def details(channel, song_id):
     song_get = Song.select() \
         .where(Song.id == song_id)
