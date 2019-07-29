@@ -33,15 +33,15 @@ def careful_fetch(url):
             pass
 
 
-def string_to_time(timestring,seconds=True):
+def string_to_time(timestring, seconds=True):
     """
 
     :rtype: datetime.time
     """
     if seconds:
-        format="%H:%M:%S"
+        format = "%H:%M:%S"
     else:
-        format="%H:%M"
+        format = "%H:%M"
     return datetime.strptime(timestring, format).time()
 
 
