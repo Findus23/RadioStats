@@ -6,3 +6,4 @@ dist/
 web/node_modules/
 web/stats.json
 yarn-error.log
+runtime/
