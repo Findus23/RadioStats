@@ -97,7 +97,7 @@ def popular(channel):
     get = get.group_by(Play.song).order_by(SQL('count').desc())
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
-    if request.args.get('highlimit', False):
+    if request.args.get('highlimit', "false") == "true":
         limit = 1000
     else:
         limit = 10

@@ -214,13 +214,13 @@
                     });
             },
             getAdditional: function(many) {
-                const loadNumber = many ? 1000 : 10;
+                const loadNumber = (many === true) ? 1000 : 10;
                 axios.get(baseURL + this.channel, {
                     params: {
                         offset: this.offset,
                         date: this.momentDate.format("YYYY-MM-DD"),
                         dateType: this.dateType,
-                        highlimit: many
+                        highlimit: many === true
                     }
                 })
                     .then(response => {
