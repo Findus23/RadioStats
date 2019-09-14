@@ -32,6 +32,8 @@ def query_to_response(query, limit=10, key=False, sort=False, offset=None, list=
         element = model_to_dict(i, **kwargs)
         if list:
             element = element[list]
+            if isinstance(element, datetime):
+                element = str(element)
         if sort:
             element["order"] = order
             order += 1
