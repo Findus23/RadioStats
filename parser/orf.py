@@ -8,10 +8,11 @@ def get(channel):
         time = datetime.fromtimestamp(song["playedat"])
 
         if " - " in song["title"]:
-            if channel.shortname == "oe3" or channel.shortname == "fm4":
+            # for whatever crazy reason only half of the channels are the other way round
+            if channel.shortname in ["oe3", "fm4", "noe", "wie", "stm"]:
                 artist, title = song["title"].split(" - ")[:2]
             else:
-                title, artist = song["title"].split(" - ")[:2]  # non oe3 channels are the other way round
+                title, artist = song["title"].split(" - ")[:2]
         else:
             artist = ""
             title = song["title"]
