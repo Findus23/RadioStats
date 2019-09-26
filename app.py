@@ -1,12 +1,11 @@
 # Blog configuration values.
 
-import logging
-
+import sentry_sdk
 from flask import Flask
 from flask_caching import Cache
 from playhouse.flask_utils import FlaskDB
 from playhouse.pool import PooledMySQLDatabase
-from raven.contrib.flask import Sentry
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 import config
 
@@ -17,13 +16,16 @@ else:
     CACHE_TYPE = "null"
 CACHE_REDIS_DB = config.redisDB
 
+if config.sentryDSN:
+    sentry_sdk.init(
+        dsn=config.sentryDSN,
+        integrations=[FlaskIntegration()]
+    )
+
 # Create a Flask WSGI app and configure it using values from the module.
 app = Flask(__name__)
 app.config.from_object(__name__)
 cache = Cache(app)
-
-if config.sentryDSN:
-    sentry = Sentry(app, dsn=config.sentryDSN, logging=True, level=logging.WARNING)
 
 flask_db = FlaskDB(app)
 
