@@ -1,13 +1,12 @@
 from datetime import timedelta
 
-from raven import Client
-
+import sentry_sdk
 import config
 from models import *
 from parser import kronehit, aas, orf, ara
 
 if config.sentryDSN:
-    client = Client(config.sentryDSN)
+    client = sentry_sdk.init(dsn=config.sentryDSN)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
