@@ -9,7 +9,7 @@ python = ">=3.7"
 requests = "^2.22.0"
 Flask = "^1.1.1"
 Flask-Caching = "^1.8.0"
-sentry-sdk = "^0.13.5"
+sentry-sdk = {extras = ["flask"], version = "^0.13.5"}
 spotipy = "^2.4.4"
 peewee = "^3.13.1"
 beautifulsoup4 = "^4.8.2"
