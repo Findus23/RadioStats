@@ -2,8 +2,8 @@ import re
 import sys
 from time import sleep
 
+import sentry_sdk
 import spotipy
-from raven import Client
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import config
@@ -11,7 +11,7 @@ from config import spotify
 from models import *
 
 if config.sentryDSN:
-    client = Client(config.sentryDSN)
+    client = sentry_sdk.init(dsn=config.sentryDSN)
 
 crm = SpotifyClientCredentials(**spotify)
 sp = spotipy.Spotify(client_credentials_manager=crm)
