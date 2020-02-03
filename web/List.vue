@@ -4,7 +4,7 @@
             <router-link v-for="channel in channels" :key="channel.shortname"
                          :to="{ name: 'List', params: { channel: channel.shortname }}"
                          :style="{borderColor:channel.primary_color}">
-                <img :src="require('./icons/'+icon(channel.shortname))"
+                <img :src="require('./icons/'+icon(channel.shortname)).default"
                      :alt="channel.stationname" :title="channel.stationname"
                      :class="channel.has_data?[]:['noData']">
 
