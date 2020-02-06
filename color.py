@@ -3,6 +3,7 @@ import sys
 import tempfile
 from pathlib import Path
 from subprocess import run
+from time import sleep
 
 import requests
 import sentry_sdk
@@ -41,8 +42,8 @@ for song in query.limit(limit):
                 fd.write(chunk)
         output = run(["node", colorjs, image], capture_output=True)
         data = json.loads(output.stdout)
-        print(data)
     song.background_color = to_rgb_string(*data["LightVibrant"]["rgb"]) if "LightVibrant" in data else None
     song.alternative_color = to_rgb_string(*data["DarkVibrant"]["rgb"]) if "DarkVibrant" in data else None
     song.text_color = to_rgb_string(*data["DarkMuted"]["rgb"]) if "DarkMuted" in data else None
     song.save()
+    sleep(5)
