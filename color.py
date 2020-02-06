@@ -29,6 +29,8 @@ else:
 query = Song.select().where((Song.show == 0) & (Song.image_large.is_null(False)) & (Song.background_color.is_null()))
 for song in query.limit(limit):
     url = song.image_large
+    if not url:
+        continue
 
     r = requests.get(url)
     with tempfile.TemporaryDirectory() as tmpdirname:
