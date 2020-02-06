@@ -29,7 +29,9 @@ else:
 
 query = Song.select().where((Song.show == 0) & (Song.image_large.is_null(False)) & (Song.background_color.is_null()))
 for song in query.limit(limit):
+    print(song.title)
     url = song.image_large
+    print(url)
     if not url:
         continue
 
@@ -46,4 +48,7 @@ for song in query.limit(limit):
     song.alternative_color = to_rgb_string(*data["DarkVibrant"]["rgb"]) if "DarkVibrant" in data else None
     song.text_color = to_rgb_string(*data["DarkMuted"]["rgb"]) if "DarkMuted" in data else None
     song.save()
+    print(song.background_color)
+    print(song.alternative_color)
+    print(song.text_color)
     sleep(5)
