@@ -21,6 +21,9 @@ class Song(BaseModel):
     spotify_url = CharField(null=True)
     image_small = CharField(null=True)
     image_large = CharField(null=True)
+    background_color = CharField(null=True, max_length=6)
+    alternative_color = CharField(null=True, max_length=6)
+    text_color = CharField(null=True, max_length=6)
 
     class Meta:
         indexes = ((("artist", "title"), True),)
