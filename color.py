@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 else:
     limit = 50
 
-query = Song.select().where((Song.show == 0) & (Song.image_large.is_null(False)) & (Song.background_color.is_null()))
+query = Song.select().where((Song.show == 0) & (Song.spotify_data == 1) & (Song.background_color.is_null()))
 for song in query.limit(limit):
     print(song.title)
     url = song.image_large
