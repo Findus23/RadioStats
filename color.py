@@ -17,7 +17,8 @@ def to_rgb_string(r: float, g: float, b: float) -> str:
     return "{0:02x}{1:02x}{2:02x}".format(r, g, b)
 
 
-colorjs = Path("./web/color.js")
+cwd = Path(__file__).resolve().parent
+colorjs = cwd / Path("./web/color.js")
 
 if config.sentryDSN:
     client = sentry_sdk.init(dsn=config.sentryDSN)
