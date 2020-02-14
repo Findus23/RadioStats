@@ -37,8 +37,8 @@ for song in query.order_by(fn.Rand()).limit(limit):
         continue
 
     r = requests.get(url)
-    if r.status_code==404:
-        song.spotify_data=None
+    if r.status_code == 404:
+        song.spotify_data = None
         song.save()
         continue
     with tempfile.TemporaryDirectory() as tmpdirname:
