@@ -29,7 +29,7 @@ else:
     limit = 50
 
 query = Song.select().where((Song.show == 0) & (Song.spotify_data == 1) & (Song.background_color.is_null()))
-for song in query.limit(limit):
+for song in query.order_by(fn.Rand()).limit(limit):
     print(song.title)
     url = song.image_large
     print(url)
@@ -37,6 +37,10 @@ for song in query.limit(limit):
         continue
 
     r = requests.get(url)
+    if r.status_code==404:
+        song.spotify_data=None
+        song.save()
+        continue
     with tempfile.TemporaryDirectory() as tmpdirname:
         tmpdir = Path(tmpdirname)
         image = tmpdir / "image.jpg"
