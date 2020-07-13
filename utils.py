@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime, timedelta
 from time import sleep
 
@@ -32,12 +33,16 @@ def careful_fetch(url):
             pass
 
 
-def string_to_time(timestring):
+def string_to_time(timestring, seconds=True):
     """
 
     :rtype: datetime.time
     """
-    return datetime.strptime(timestring, "%H:%M:%S").time()
+    if seconds:
+        format = "%H:%M:%S"
+    else:
+        format = "%H:%M"
+    return datetime.strptime(timestring, format).time()
 
 
 def time_to_date(time):
@@ -65,6 +70,9 @@ def local_to_utc(date):
 
 def fetch(url, json=False):
     req = requests.get(url, headers=headers)
+    if req.status_code != 200:
+        print("URL failed to fetch: {status} {url}".format(status=req.status_code, url=url), file=sys.stderr)
+        return False
     if json:
         return req.json()
     return req.text

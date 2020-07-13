@@ -1,7 +1,12 @@
 from datetime import timedelta
 
+import sentry_sdk
+import config
 from models import *
-from parser import kronehit, aas, orf, ara, eng
+from parser import kronehit, aas, orf, ara
+
+if config.sentryDSN:
+    client = sentry_sdk.init(dsn=config.sentryDSN)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
@@ -50,7 +55,9 @@ for channel in Channel.select():
         elif channel.shortname == "ara":
             pars = ara
         elif channel.shortname == "eng":
-            pars = eng
+            continue
+        elif channel.shortname == "all":
+            continue
         else:
             pars = orf
 

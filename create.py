@@ -7,8 +7,8 @@ for i in [Channel, Song, Play]:
     i.create_table()
 
 for id, channel in channelInfo.channels.items():
-    if "streamurlShoutcast2" in channel:
-        streamurl = channel["streamurlShoutcast2"].replace(";", "")
+    if "streamurl" in channel:
+        streamurl = "https:" + channel["streamurl"].replace(";", "")
     else:
         streamurl = None
     if "cStationName" in channel:

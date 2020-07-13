@@ -7,5 +7,5 @@ def get(channel):
     for track in fetch(URL, True)["items"]:
         artist = track["ArtistName"]
         title = track["TrackName"]
-        time = time_to_date(string_to_time(track["PlayTime"]))
+        time = time_to_date(string_to_time(track["PlayTime"],seconds=False))
         yield time, artist, title

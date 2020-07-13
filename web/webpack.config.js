@@ -1,10 +1,14 @@
 let path = require('path');
 let webpack = require('webpack');
-let CleanWebpackPlugin = require('clean-webpack-plugin');
+let {CleanWebpackPlugin} = require('clean-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let SriPlugin = require('webpack-subresource-integrity');
 let CompressionPlugin = require('compression-webpack-plugin');
-let ExtractTextPlugin = require("extract-text-webpack-plugin");
+let MiniCssExtractPlugin = require("mini-css-extract-plugin");
+let VueLoaderPlugin = require('vue-loader/lib/plugin');
+const SentryCliPlugin = require('@sentry/webpack-plugin');
+
+const commitHash = require('child_process').execSync('git rev-parse HEAD').toString().replace(/\n$/, '');
 
 module.exports = {
     entry: {polyfill: "@babel/polyfill", app: './main.js'},
@@ -12,8 +16,10 @@ module.exports = {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/',
         filename: '[name]-build-[hash].js',
-        crossOriginLoading: "anonymous"
+        crossOriginLoading: "anonymous",
+        globalObject: 'this' // https://github.com/webpack-contrib/worker-loader/issues/166
     },
+    mode: process.env.NODE_ENV,
     module: {
         rules: [
             {
@@ -29,12 +35,14 @@ module.exports = {
                         img: 'src',
                         image: 'xlink:href'
                     },
-                    postcss: [require('autoprefixer')()]
                 }
             },
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: file => (
+                    /node_modules/.test(file) &&
+                    !/\.vue\.js/.test(file)
+                ),
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -59,7 +67,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[name].[ext]?hash=[hash]'
+                            // name: '[name].[ext]?hash=[hash]'
                         }
                     },
                     {
@@ -72,6 +80,49 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.worker.js$/,
+                loader: 'worker-loader',
+                options: { /* ... */ }
+            },
+            {
+                test: /\.yaml$/,
+                loader: 'yml-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    process.env.NODE_ENV !== 'production'
+                        ? 'vue-style-loader'
+                        : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: [require('autoprefixer')()]
+                        }
+                    },
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    process.env.NODE_ENV !== 'production'
+                        ? 'vue-style-loader'
+                        : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {importLoaders: 1}
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: [require('autoprefixer')()]
+                        }
+                    },
+                ]
             }
         ]
     },
@@ -95,16 +146,22 @@ module.exports = {
             hashFuncNames: ['sha256'],
             enabled: process.env.NODE_ENV === 'production',
         }),
-        new webpack.optimize.CommonsChunkPlugin({name: "commons"}),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/)
-    ]
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/),
+
+        new VueLoaderPlugin()
+    ],
 };
 
 if (process.env.NODE_ENV === 'production') {
+    module.exports.optimization = {
+        splitChunks: {
+            name: "commons"
+        }
+    };
     module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-        new CleanWebpackPlugin("../dist"),
+        new CleanWebpackPlugin(),
         new webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
@@ -113,20 +170,22 @@ if (process.env.NODE_ENV === 'production') {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"'
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: {
-                warnings: false
-            }
+            },
+            COMMIT_HASH: JSON.stringify(commitHash),
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        new ExtractTextPlugin("style-[hash].css"),
+        new MiniCssExtractPlugin("style-[hash].css"),
         new CompressionPlugin({
-            test: /\.(js|css)/
+            test: /\.(js|css|html)/
         }),
+        new SentryCliPlugin({
+            include: '../dist/',
+            configFile: 'sentry.properties',
+        }),
+        // new SriPlugin({
+        //     hashFuncNames: ['sha256'],
+        // }),
     ]);
 }
