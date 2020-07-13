@@ -2,6 +2,7 @@ export default class MatomoTracker {
     init() {
         if (typeof _paq === 'undefined') { // should only occur with hot reloading
             let _paq = _paq || [];
+            _paq.push(['disableCookies']);
             _paq.push(['enableHeartBeatTimer']);
             if (process.env.NODE_ENV === "production") {
                 _paq.push(["setDoNotTrack", true]);
