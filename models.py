@@ -1,11 +1,10 @@
-from peewee import *
+from peewee import CharField, BooleanField, DateTimeField, ForeignKeyField
 
 from basemodel import BaseModel
 
 
 class Channel(BaseModel):
     shortname = CharField(unique=True, max_length=5)
-    streamurl = CharField(null=True)
     stationname = CharField()
     has_data = BooleanField()
     primary_color = CharField(max_length=7)

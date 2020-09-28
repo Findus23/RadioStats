@@ -1,238 +1,134 @@
+from dataclasses import dataclass
+
+
+@dataclass
+class ChannelData:
+    shortname: str
+    stationname: str
+    has_data: bool
+    primary_color: str
+    secondary_color: str
+
+
 channels = {
-    "oe1": {
-        "shortname": "oe1",
-        "streamurl": "//oe1shoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/oe1.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/oe1infos.html",
-        "aticon": "./images/oe1-aticon.png",
-        "statncss": "./css/oe1.css",
-        "stationname": "Radio Österreich 1",
-        "cHasData": False,
-        "cPrimaryColor": "#b11a1a",
-        "cSecondaryColor": "#ffffff",
-        "cStationName": "Radio Ö1"
+    "oe1": ChannelData(
+        shortname="oe1",
+        stationname="Radio Ö1",
+        has_data=True,
+        primary_color="#b11a1a",
+        secondary_color="#ffffff"
+    ),
+    "oe3": ChannelData(
+        shortname="oe3",
+        has_data=True,
+        primary_color="#002350",
+        secondary_color="#E10032",
+        stationname="Hitradio Ö3"
 
-    },
-    "oe3": {
-        "shortname": "oe3",
-        "streamurl": "//oe3shoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "http://ms01.oe3.fm/oe3metafiles/RMX/RMWEB.PHP?Res=200&Format=json&callback=onair&Type=long",
-        "curProgram": "http://ms01.oe3.fm/oe3metafiles/ModAK/ShowInfo.php?ImgRes=HD&InfoType=Full&Format=json&callback=sendung",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/oe3infos.html",
-        "aticon": "./images/oe3-aticon.png",
-        "statncss": "./css/oe3b.css",
-        "chcolor": "#f04040",
-        "stationname": "hitradio Ö3",
-        "cHasData": True,
-        "cPrimaryColor": "#002350",
-        "cSecondaryColor": "#E10032",
-        "cStationName": "Hitradio Ö3"
-
-    },
-    "fm4": {
-        "shortname": "fm4",
-        "streamurl": "//fm4shoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/fm4.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=Wochen-Plan-Fm4.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/fm4infos.html",
-        "aticon": "./images/fm4-aticon.png",
-        "statncss": "./css/fm4b.css",
-        "stationname": "Radio FM4",
-        "cHasData": True,
-        "cPrimaryColor": "#FFE500",
-        "cSecondaryColor": "#000000",
-    },
-    "bgl": {
-        "shortname": "bgl",
-        "streamurl": "//oe2bshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/bgl.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-bgl.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/bglinfos.html",
-        "aticon": "./images/bgl-aticon.png",
-        "anicon": "./images/bgl-aticon-128.png",
-        "statncss": "./css/bgl.css",
-        "stationname": "Radio Burgenland",
-        "cHasData": True,
-        "cPrimaryColor": "#ffa60f",
-        "cSecondaryColor": "#d32824"
-    },
-    "ktn": {
-        "shortname": "ktn",
-        "streamurl": "//oe2kshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/ktn.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-ktn.xml",
-        "leftbuttonstring": "Tracklist",
-        "midbuttonstring": "",
-        "infodata": "./infos/ktninfos.html",
-        "aticon": "./images/ktn-aticon.png",
-        "statncss": "./css/ktn.css",
-        "stationname": "Radio Kärnten",
-        "cHasData": False,
-        "cPrimaryColor": "#bc1716",
-        "cSecondaryColor": "#ffcd00"
-    },
-    "noe": {
-        "shortname": "noe",
-        "streamurl": "//oe2nshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/noe.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-noe.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/noeinfos.html",
-        "aticon": "./images/noe-aticon.png",
-        "statncss": "./css/noe.css",
-        "stationname": "Radio Niederösterreich",
-        "cHasData": True,
-        "cPrimaryColor": "#002777",
-        "cSecondaryColor": "#ffcd00"
-    },
-    "ooe": {
-        "shortname": "ooe",
-        "streamurl": "//oe2oshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/ooe.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-ooe.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "",
-        "infodata": "./infos/ooeinfos.html",
-        "aticon": "./images/ooe-aticon.png",
-        "statncss": "./css/ooe.css",
-        "stationname": "Radio Oberösterreich",
-        "deskstream": "http://orfradio.liwest.at/liveHQ.m3u",
-        "cHasData": True,
-        "cPrimaryColor": "#bc1716",
-        "cSecondaryColor": "#ffffff"
-    },
-    "sbg": {
-        "shortname": "sbg",
-        "streamurl": "//oe2sshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/sbg.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-sbg.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "",
-        "infodata": "./infos/sbginfos.html",
-        "aticon": "./images/sbg-aticon.png",
-        "splash": "./images/sbg-splash.png",
-        "statncss": "./css/sbg.css",
-        "stationname": "Radio Salzburg",
-        "cHasData": True,
-        "cPrimaryColor": "#bc1716",
-        "cSecondaryColor": "#ffffff"
-    },
-    "stm": {
-        "shortname": "stm",
-        "streamurl": "//oe2stshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/stmk.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-stm.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/stminfos.html",
-        "aticon": "./images/stm-aticon.png",
-        "statncss": "./css/stm.css",
-        "stationname": "Radio Steiermark",
-        "cHasData": True,
-        "cPrimaryColor": "#006843",
-        "cSecondaryColor": "#ffffff"
-    },
-    "tir": {
-        "shortname": "tir",
-        "streamurl": "//oe2tshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/tir.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-tir.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/tirinfos.html",
-        "aticon": "./images/tir-aticon.png",
-        "statncss": "./css/tir.css",
-        "stationname": "Radio Tirol",
-        "cHasData": True,
-        "cPrimaryColor": "#bc1716",
-        "cSecondaryColor": "#ffffff"
-    },
-    "vbg": {
-        "shortname": "vbg",
-        "streamurl": "//oe2vshoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/vbg.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-vbg.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/vbginfos.html",
-        "aticon": "./images/vbg-aticon.png",
-        "statncss": "./css/vbg.css",
-        "stationname": "Radio Vorarlberg",
-        "cHasData": False,
-        "cPrimaryColor": "#bc1716",
-        "cSecondaryColor": "#ffffff"
-    },
-    "wie": {
-        "shortname": "wie",
-        "streamurl": "//oe2w2shoutcast.sf.apa.at/;",
-        "strmtype": "audio/mpeg",
-        "tracklist": "//hop.orf.at/img-trackservice/wien.js",
-        "curProgram": "https://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-wie.xml",
-        "leftbuttonstring": "Hitlist",
-        "midbuttonstring": "Podcasts",
-        "infodata": "./infos/wieinfos.html",
-        "aticon": "./images/wie-aticon.png",
-        "splash": "./images/wie-splash.png",
-        "statncss": "./css/wie.css",
-        "stationname": "Radio Wien",
-        "cHasData": True,
-        "cPrimaryColor": "#ee7e01",
-        "cSecondaryColor": "#552382"
-    },
-    "kht": {
-        "shortname": "kht",
-        "stationname": "Kronehit",
-        "cHasData": True,
-        "cPrimaryColor": "#000000",
-        "cSecondaryColor": "#b89c4f"
-    },
-    "886": {
-        "shortname": "886",
-        "stationname": "Radio 88.6",
-        "cHasData": True,
-        "cPrimaryColor": "#123e6b",
-        "cSecondaryColor": "#ffe116"
-    },
-    "ara": {
-        "shortname": "ara",
-        "stationname": "Radio Arabella",
-        "cHasData": True,
-        "cPrimaryColor": "#003e88",
-        "cSecondaryColor": "#e6007e"
-    },
-    "eng": {
-        "shortname": "eng",
-        "stationname": "Engergy Wien/Nö/Bgld",
-        "cHasData": True,
-        "cPrimaryColor": "#000000",
-        "cSecondaryColor": "#E2001A"
-    },
-    "all": {
-        "shortname": "all",
-        "stationname": "Alle",
-        "cHasData": True,
-        "cPrimaryColor": "black",
-        "cSecondaryColor": "white"
-    }
+    ),
+    "fm4": ChannelData(
+        shortname="fm4",
+        stationname="Radio FM4",
+        has_data=True,
+        primary_color="#FFE500",
+        secondary_color="#000000",
+    ),
+    "bgl": ChannelData(
+        shortname="bgl",
+        stationname="Radio Burgenland",
+        has_data=True,
+        primary_color="#ffa60f",
+        secondary_color="#d32824"
+    ),
+    "ktn": ChannelData(
+        shortname="ktn",
+        stationname="Radio Kärnten",
+        has_data=True,
+        primary_color="#bc1716",
+        secondary_color="#ffcd00"
+    ),
+    "noe": ChannelData(
+        shortname="noe",
+        stationname="Radio Niederösterreich",
+        has_data=True,
+        primary_color="#002777",
+        secondary_color="#ffcd00"
+    ),
+    "ooe": ChannelData(
+        shortname="ooe",
+        stationname="Radio Oberösterreich",
+        has_data=True,
+        primary_color="#bc1716",
+        secondary_color="#ffffff"
+    ),
+    "sbg": ChannelData(
+        shortname="sbg",
+        stationname="Radio Salzburg",
+        has_data=True,
+        primary_color="#bc1716",
+        secondary_color="#ffffff"
+    ),
+    "stm": ChannelData(
+        shortname="stm",
+        stationname="Radio Steiermark",
+        has_data=True,
+        primary_color="#006843",
+        secondary_color="#ffffff"
+    ),
+    "tir": ChannelData(
+        shortname="tir",
+        stationname="Radio Tirol",
+        has_data=True,
+        primary_color="#bc1716",
+        secondary_color="#ffffff"
+    ),
+    "vbg": ChannelData(
+        shortname="vbg",
+        stationname="Radio Vorarlberg",
+        has_data=True,
+        primary_color="#bc1716",
+        secondary_color="#ffffff"
+    ),
+    "wie": ChannelData(
+        shortname="wie",
+        stationname="Radio Wien",
+        has_data=True,
+        primary_color="#ee7e01",
+        secondary_color="#552382"
+    ),
+    "kht": ChannelData(
+        shortname="kht",
+        stationname="Kronehit",
+        has_data=True,
+        primary_color="#000000",
+        secondary_color="#b89c4f"
+    ),
+    "886": ChannelData(
+        shortname="886",
+        stationname="Radio 88.6",
+        has_data=True,
+        primary_color="#123e6b",
+        secondary_color="#ffe116"
+    ),
+    "ara": ChannelData(
+        shortname="ara",
+        stationname="Radio Arabella",
+        has_data=True,
+        primary_color="#003e88",
+        secondary_color="#e6007e"
+    ),
+    "eng": ChannelData(
+        shortname="eng",
+        stationname="Engergy Wien/Nö/Bgld",
+        has_data=True,
+        primary_color="#000000",
+        secondary_color="#E2001A"
+    ),
+    "all": ChannelData(
+        shortname="all",
+        stationname="Alle",
+        has_data=True,
+        primary_color="black",
+        secondary_color="white"
+    ),
 }

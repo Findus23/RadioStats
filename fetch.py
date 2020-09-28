@@ -1,16 +1,14 @@
 from datetime import timedelta
 
 import sentry_sdk
+from peewee import DoesNotExist, IntegrityError
+
 import config
 from models import *
-from parser import kronehit, aas, orf, ara
+from parser import KroneHitFetcher, AchtundachzigsechsFetcher, ArabellaFetcher, OrfFetcher
 
 if config.sentryDSN:
     client = sentry_sdk.init(dsn=config.sentryDSN)
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
-}
 
 
 def detect_show(artist, title):
@@ -49,17 +47,17 @@ def add_entry(time, artist, title):
 for channel in Channel.select():
     if channel.has_data:
         if channel.shortname == "kht":
-            pars = kronehit
+            pars = KroneHitFetcher()
         elif channel.shortname == "886":
-            pars = aas
+            pars = AchtundachzigsechsFetcher()
         elif channel.shortname == "ara":
-            pars = ara
+            pars = ArabellaFetcher()
         elif channel.shortname == "eng":
             continue
         elif channel.shortname == "all":
             continue
         else:
-            pars = orf
+            pars = OrfFetcher()
 
         for time, artist, title in pars.get(channel):
             add_entry(time, artist, title)

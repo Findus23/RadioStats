@@ -2,7 +2,7 @@ import calendar
 from datetime import datetime, timedelta
 
 from flask import jsonify, request
-from playhouse.shortcuts import model_to_dict
+from playhouse.shortcuts import model_to_dict, fn, SQL
 
 from app import app, cache
 from models import *

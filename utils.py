@@ -1,16 +1,18 @@
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from time import sleep
 
 import pytz
 import requests
+from requests import Response
 
-headers = {
+s = requests.Session()
+s.headers.update({
     'User-Agent': 'Mozilla/5.0 (compatible; RadioStats/1.0;)',
-}
+})
 
 
-def careful_fetch(url):
+def careful_fetch(url) -> Response:
     """
     :rtype: requests.models.Response
     """
@@ -19,7 +21,7 @@ def careful_fetch(url):
     tries = 0
     while result is None:
         try:
-            req = requests.get(url, headers=headers)
+            req = s.get(url)
             if "Invalid resource" in req.text:
                 raise requests.exceptions.ConnectionError
             return req
@@ -33,11 +35,7 @@ def careful_fetch(url):
             pass
 
 
-def string_to_time(timestring, seconds=True):
-    """
-
-    :rtype: datetime.time
-    """
+def string_to_time(timestring, seconds=True) -> time:
     if seconds:
         format = "%H:%M:%S"
     else:
@@ -45,12 +43,7 @@ def string_to_time(timestring, seconds=True):
     return datetime.strptime(timestring, format).time()
 
 
-def time_to_date(time):
-    """
-
-    :rtype: datetime.datetime
-    :type time: datetime.time
-    """
+def time_to_date(time: time) -> datetime:
     time_hour = time.hour
     day = datetime.now()
     current_hour = day.hour
@@ -69,7 +62,7 @@ def local_to_utc(date):
 
 
 def fetch(url, json=False):
-    req = requests.get(url, headers=headers)
+    req = s.get(url)
     if req.status_code != 200:
         print("URL failed to fetch: {status} {url}".format(status=req.status_code, url=url), file=sys.stderr)
         return False
