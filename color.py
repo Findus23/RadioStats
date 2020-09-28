@@ -7,6 +7,7 @@ from time import sleep
 
 import requests
 import sentry_sdk
+from peewee import fn
 
 import config
 from models import *
