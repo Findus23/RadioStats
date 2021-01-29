@@ -1,6 +1,6 @@
 [[package]]
 name = "beautifulsoup4"
-version = "4.9.2"
+version = "4.9.3"
 description = "Screen-scraping library"
 category = "main"
 optional = false
@@ -23,7 +23,7 @@ python-versions = "*"
 
 [[package]]
 name = "certifi"
-version = "2020.6.20"
+version = "2020.12.5"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -31,11 +31,11 @@ python-versions = "*"
 
 [[package]]
 name = "chardet"
-version = "3.0.4"
+version = "4.0.0"
 description = "Universal encoding detector for Python 2 and 3"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "click"
@@ -129,7 +129,7 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
 name = "peewee"
-version = "3.13.3"
+version = "3.14.0"
 description = "a little orm"
 category = "main"
 optional = false
@@ -149,7 +149,7 @@ rsa = ["cryptography"]
 
 [[package]]
 name = "pytz"
-version = "2020.1"
+version = "2020.5"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -168,7 +168,7 @@ hiredis = ["hiredis (>=0.1.3)"]
 
 [[package]]
 name = "requests"
-version = "2.24.0"
+version = "2.25.1"
 description = "Python HTTP for Humans."
 category = "main"
 optional = false
@@ -176,17 +176,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
 certifi = ">=2017.4.17"
-chardet = ">=3.0.2,<4"
+chardet = ">=3.0.2,<5"
 idna = ">=2.5,<3"
-urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
+urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
 security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
+socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
 name = "sentry-sdk"
-version = "0.17.8"
+version = "0.19.5"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -224,7 +224,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "soupsieve"
-version = "2.0.1"
+version = "2.1"
 description = "A modern CSS selector implementation for Beautiful Soup."
 category = "main"
 optional = false
@@ -232,7 +232,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "spotipy"
-version = "2.16.0"
+version = "2.16.1"
 description = "A light weight Python library for the Spotify Web API"
 category = "main"
 optional = false
@@ -244,7 +244,7 @@ six = ">=1.10.0"
 
 [package.extras]
 doc = ["Sphinx (>=1.5.2)"]
-test = ["mock (2.0.0)"]
+test = ["mock (==2.0.0)"]
 
 [[package]]
 name = "urllib3"
@@ -256,7 +256,7 @@ python-versions = "*"
 
 [package.extras]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
-socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
+socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "werkzeug"
@@ -273,24 +273,24 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "d32e930d2994b6dcc97a0679843cbed9b5345b63a953e4ce98c935d281679b50"
+content-hash = "14eb902846613fa025ef67b56f05957a3f1090e4419e8fdf9efbd47b521c4ec9"
 
 [metadata.files]
 beautifulsoup4 = [
-    {file = "beautifulsoup4-4.9.2-py2-none-any.whl", hash = "sha256:645d833a828722357038299b7f6879940c11dddd95b900fe5387c258b72bb883"},
-    {file = "beautifulsoup4-4.9.2-py3-none-any.whl", hash = "sha256:5dfe44f8fddc89ac5453f02659d3ab1668f2c0d9684839f0785037e8c6d9ac8d"},
-    {file = "beautifulsoup4-4.9.2.tar.gz", hash = "sha256:1edf5e39f3a5bc6e38b235b369128416c7239b34f692acccececb040233032a1"},
+    {file = "beautifulsoup4-4.9.3-py2-none-any.whl", hash = "sha256:4c98143716ef1cb40bf7f39a8e3eec8f8b009509e74904ba3a7b315431577e35"},
+    {file = "beautifulsoup4-4.9.3-py3-none-any.whl", hash = "sha256:fff47e031e34ec82bf17e00da8f592fe7de69aeea38be00523c04623c04fb666"},
+    {file = "beautifulsoup4-4.9.3.tar.gz", hash = "sha256:84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25"},
 ]
 blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
 certifi = [
-    {file = "certifi-2020.6.20-py2.py3-none-any.whl", hash = "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"},
-    {file = "certifi-2020.6.20.tar.gz", hash = "sha256:5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3"},
+    {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
+    {file = "certifi-2020.12.5.tar.gz", hash = "sha256:1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c"},
 ]
 chardet = [
-    {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},
-    {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
+    {file = "chardet-4.0.0-py2.py3-none-any.whl", hash = "sha256:f864054d66fd9118f2e67044ac8981a54775ec5b67aed0441892edb553d21da5"},
+    {file = "chardet-4.0.0.tar.gz", hash = "sha256:0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"},
 ]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
@@ -356,40 +356,40 @@ markupsafe = [
     {file = "MarkupSafe-1.1.1.tar.gz", hash = "sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"},
 ]
 peewee = [
-    {file = "peewee-3.13.3.tar.gz", hash = "sha256:1269a9736865512bd4056298003aab190957afe07d2616cf22eaf56cb6398369"},
+    {file = "peewee-3.14.0.tar.gz", hash = "sha256:59c5ef43877029b9133d87001dcc425525de231d1f983cece8828197fb4b84fa"},
 ]
 pymysql = [
     {file = "PyMySQL-0.10.1-py2.py3-none-any.whl", hash = "sha256:44f47128dda8676e021c8d2dbb49a82be9e4ab158b9f03e897152a3a287c69ea"},
     {file = "PyMySQL-0.10.1.tar.gz", hash = "sha256:263040d2779a3b84930f7ac9da5132be0fefcd6f453a885756656103f8ee1fdd"},
 ]
 pytz = [
-    {file = "pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed"},
-    {file = "pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048"},
+    {file = "pytz-2020.5-py2.py3-none-any.whl", hash = "sha256:16962c5fb8db4a8f63a26646d8886e9d769b6c511543557bc84e9569fb9a9cb4"},
+    {file = "pytz-2020.5.tar.gz", hash = "sha256:180befebb1927b16f6b57101720075a984c019ac16b1b7575673bea42c6c3da5"},
 ]
 redis = [
     {file = "redis-3.5.3-py2.py3-none-any.whl", hash = "sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24"},
     {file = "redis-3.5.3.tar.gz", hash = "sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2"},
 ]
 requests = [
-    {file = "requests-2.24.0-py2.py3-none-any.whl", hash = "sha256:fe75cc94a9443b9246fc7049224f75604b113c36acb93f87b80ed42c44cbb898"},
-    {file = "requests-2.24.0.tar.gz", hash = "sha256:b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b"},
+    {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
+    {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-0.17.8.tar.gz", hash = "sha256:e159f7c919d19ae86e5a4ff370fccc45149fab461fbeb93fb5a735a0b33a9cb1"},
-    {file = "sentry_sdk-0.17.8-py2.py3-none-any.whl", hash = "sha256:c9c0fa1412bad87104c4eee8dd36c7bbf60b0d92ae917ab519094779b22e6d9a"},
+    {file = "sentry-sdk-0.19.5.tar.gz", hash = "sha256:737a094e49a529dd0fdcaafa9e97cf7c3d5eb964bd229821d640bc77f3502b3f"},
+    {file = "sentry_sdk-0.19.5-py2.py3-none-any.whl", hash = "sha256:0a711ec952441c2ec89b8f5d226c33bc697914f46e876b44a4edd3e7864cf4d0"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
 ]
 soupsieve = [
-    {file = "soupsieve-2.0.1-py3-none-any.whl", hash = "sha256:1634eea42ab371d3d346309b93df7870a88610f0725d47528be902a0d95ecc55"},
-    {file = "soupsieve-2.0.1.tar.gz", hash = "sha256:a59dc181727e95d25f781f0eb4fd1825ff45590ec8ff49eadfd7f1a537cc0232"},
+    {file = "soupsieve-2.1-py3-none-any.whl", hash = "sha256:4bb21a6ee4707bf43b61230e80740e71bfe56e55d1f1f50924b087bb2975c851"},
+    {file = "soupsieve-2.1.tar.gz", hash = "sha256:6dc52924dc0bc710a5d16794e6b3480b2c7c08b07729505feab2b2c16661ff6e"},
 ]
 spotipy = [
-    {file = "spotipy-2.16.0-py2-none-any.whl", hash = "sha256:800330badc1b953417dace1532a586220d35b2240eb2e538e883e19e6bf1b53d"},
-    {file = "spotipy-2.16.0-py3-none-any.whl", hash = "sha256:9d07b8948c30d8a338805440797263749ccad07c22009f9b3112aa2bcb2ebcea"},
-    {file = "spotipy-2.16.0.tar.gz", hash = "sha256:315eadd1248053ed336b4d3adbf2e3c32895fdbb0cfcd170542c848c8fd45649"},
+    {file = "spotipy-2.16.1-py2-none-any.whl", hash = "sha256:2670ad5715d5bd53a353708eea0ab2aa154232e2fe25d826dc39da5b910f0e17"},
+    {file = "spotipy-2.16.1-py3-none-any.whl", hash = "sha256:9d4f0c5857a2c9bb72b39d66e38182ccaf62bcf18a5a16b4f2be8e802eca2f2c"},
+    {file = "spotipy-2.16.1.tar.gz", hash = "sha256:4564a6b05959deb82acc96a3fe6883db1ad9f8c73b7ff3b9f1f44db43feba0b8"},
 ]
 urllib3 = [
     {file = "urllib3-1.22-py2.py3-none-any.whl", hash = "sha256:06330f386d6e4b195fbfc736b297f58c5a892e4440e54d294d7004e3a9bbea1b"},
