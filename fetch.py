@@ -22,6 +22,8 @@ def detect_show(artist, title):
 
 def add_entry(time, artist, title):
     print(time, artist, title)
+    if artist is None or title is None:
+        return
     if artist.isupper():
         artist = artist.title()
     if title.isupper():
