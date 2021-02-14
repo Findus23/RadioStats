@@ -29,6 +29,7 @@ def add_entry(time, artist, title):
     if title.isupper():
         title = title.title()
     title = title.replace("+", " ")
+    title = title.replace("NEU: ", "")
     try:
         song_object = Song.get(artist=artist, title=title)
     except DoesNotExist:
