@@ -19,7 +19,7 @@ def to_rgb_string(r: float, g: float, b: float) -> str:
 
 
 cwd = Path(__file__).resolve().parent
-colorjs = cwd / Path("./web/color.js")
+colorjs = cwd / Path("./web/src/color.js")
 
 if config.sentryDSN:
     client = sentry_sdk.init(dsn=config.sentryDSN)
