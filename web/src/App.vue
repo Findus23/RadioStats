@@ -24,24 +24,23 @@
 </template>
 
 <script>
-    export default {
-        name: 'app',
-        props: ["language"],
-        computed: {
-            isIE() {
-				let ua = window.navigator.userAgent;
-				return /MSIE|Trident/.test(ua);
-            }
+// import "./node_modules/normalize.css/normalize.css"
+
+export default {
+    name: 'app',
+    props: ["language"],
+    computed: {
+        isIE() {
+            let ua = window.navigator.userAgent;
+            return /MSIE|Trident/.test(ua);
         }
-    };
+    }
+};
 </script>
 
-<style lang="css" src="./node_modules/normalize.css/normalize.css">
-</style>
-
 <style lang="scss">
-    @import "variables";
-    @import "node_modules/milligram/src/milligram";
+    @import "./variables";
+    @import "./node_modules/milligram/src/milligram";
 
     .iewarning {
         margin: 2rem;

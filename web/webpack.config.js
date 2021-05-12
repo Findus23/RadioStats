@@ -19,7 +19,7 @@ module.exports = {
         crossOriginLoading: "anonymous",
         globalObject: 'this' // https://github.com/webpack-contrib/worker-loader/issues/166
     },
-    mode: process.env.NODE_ENV,
+    mode: import.meta.env.NODE_ENV,
     module: {
         rules: [
             {
@@ -27,7 +27,7 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     sourceMap: true,
-                    extractCSS: process.env.NODE_ENV === 'production',
+                    extractCSS: import.meta.env.NODE_ENV === 'production',
                     cssSourceMap: true,
                     transformToRequire: {
                         video: ['src', 'poster'],
@@ -93,7 +93,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    process.env.NODE_ENV !== 'production'
+                    import.meta.env.NODE_ENV !== 'production'
                         ? 'vue-style-loader'
                         : MiniCssExtractPlugin.loader,
                     'css-loader',
@@ -109,7 +109,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    process.env.NODE_ENV !== 'production'
+                    import.meta.env.NODE_ENV !== 'production'
                         ? 'vue-style-loader'
                         : MiniCssExtractPlugin.loader,
                     {
@@ -144,7 +144,7 @@ module.exports = {
         new webpack.NamedModulesPlugin(),
         new SriPlugin({
             hashFuncNames: ['sha256'],
-            enabled: process.env.NODE_ENV === 'production',
+            enabled: import.meta.env.NODE_ENV === 'production',
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/),
 
@@ -152,7 +152,7 @@ module.exports = {
     ],
 };
 
-if (process.env.NODE_ENV === 'production') {
+if (import.meta.env.NODE_ENV === 'production') {
     module.exports.optimization = {
         splitChunks: {
             name: "commons"

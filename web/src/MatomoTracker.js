@@ -1,16 +1,15 @@
 export default class MatomoTracker {
     init() {
         if (typeof _paq === 'undefined') { // should only occur with hot reloading
-            let _paq = _paq || [];
-            _paq.push(['disableCookies']);
+            var _paq = window._paq = window._paq || [];            _paq.push(['disableCookies']);
             _paq.push(['enableHeartBeatTimer']);
-            if (process.env.NODE_ENV === "production") {
+            if (import.meta.env.NODE_ENV === "production") {
                 _paq.push(["setDoNotTrack", true]);
             }
             (function() {
-                let u = (process.env.NODE_ENV === "production") ? "https://matomo.lw1.at/" : "//localhost/piwik/";
+                let u ="https://matomo.lw1.at/" ;
                 _paq.push(['setTrackerUrl', u + 'piwik.php']);
-                _paq.push(['setSiteId', (process.env.NODE_ENV === "production") ? 15 : 6]);
+                _paq.push(['setSiteId', (import.meta.env.NODE_ENV === "production") ? 15 : 6]);
                 let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
                 g.type = 'text/javascript';
                 g.async = true;

@@ -33,11 +33,11 @@
     import moment from "moment";
     import "moment/locale/de-at";
 
-    if (process.env.NODE_ENV === "production") {
+    if (import.meta.env.NODE_ENV === "production") {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
     }
 
-    const baseURL = (process.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
+    const baseURL = (import.meta.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
 
     export default {
         name: "detailview",
@@ -89,7 +89,7 @@
 </script>
 
 <style lang="scss">
-    @import "variables";
+    @import "./variables";
 
     .detailWrapper {
         padding: 0;
