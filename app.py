@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 import config
 
-DATABASE = PooledPostgresqlDatabase("radiostats", **config.db)
+DATABASE = PooledPostgresqlDatabase(**config.db)
 if config.cache:
     CACHE_TYPE = "redis"
 else:
