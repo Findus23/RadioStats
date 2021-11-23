@@ -91,12 +91,12 @@ def get_dates_from_request():
 def popular(channel):
     date, date_type = get_dates_from_request()
     start, end = get_range(date, date_type)
-    get = Play.select(Play.song, fn.Count(SQL('*')).alias("count")) \
+    get = Play.select(Play.song, Song, fn.Count(Play.song).alias("count")) \
         .join(Channel).switch(Play).join(Song) \
         .where((Song.show == 0) & (Play.time.between(start, end)))
     if channel != "all":
         get = get.where(Channel.shortname == channel)
-    get = get.group_by(Play.song).order_by(SQL('count').desc())
+    get = get.group_by(Play.song, Song).order_by(SQL('count').desc())
     if request.args.get('offset'):
         get = get.offset(int(request.args.get('offset')))
     if request.args.get('highlimit', "false") == "true":
@@ -166,6 +166,11 @@ def stats():
 
 
 if __name__ == '__main__':
+    import logging
+
+    logger = logging.getLogger('peewee')
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(logging.DEBUG)
     app.debug = True
     app.after_request(add_cors)
     app.run()

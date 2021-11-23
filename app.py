@@ -4,12 +4,12 @@ import sentry_sdk
 from flask import Flask
 from flask_caching import Cache
 from playhouse.flask_utils import FlaskDB
-from playhouse.pool import PooledMySQLDatabase
+from playhouse.pool import PooledMySQLDatabase, PooledPostgresqlDatabase
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 import config
 
-DATABASE = PooledMySQLDatabase("radio", **config.db)
+DATABASE = PooledPostgresqlDatabase("radiostats", **config.db)
 if config.cache:
     CACHE_TYPE = "redis"
 else:

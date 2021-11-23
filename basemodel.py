@@ -1,13 +1,6 @@
-import __main__
-from peewee import Model, MySQLDatabase
+from peewee import Model
 
-import config
-
-if __main__.__file__ != "server.py":
-    db = MySQLDatabase("radio", **config.db)
-    db.connect()
-else:
-    from app import db
+from app import db
 
 
 class BaseModel(Model):
