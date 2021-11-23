@@ -1,6 +1,6 @@
 import json
 
-from websocket import create_connection
+from websocket import create_connection, WebSocket
 
 from parser import BaseFetcher
 from utils import *
@@ -10,12 +10,13 @@ URL = "wss://www.arabella.at/api/_socket/"
 
 class ArabellaFetcher(BaseFetcher):
     def get(self, channel):
-        ws = create_connection(URL, suppress_origin=True)
+        ws: WebSocket = create_connection(URL, suppress_origin=True)
         init = ws.recv()
 
         ws.send(json.dumps({"type": "select_channels", "channelIds": [1]}))
 
         result = ws.recv()
+        ws.close()
         data = json.loads(result)
         tracks = [data["currentTrack"]]
         tracks.extend(data["previousTracks"])
