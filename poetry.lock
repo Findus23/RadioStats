@@ -254,16 +254,15 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "spotipy"
-version = "2.19.0"
+version = "2.16.0"
 description = "A light weight Python library for the Spotify Web API"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-requests = ">=2.25.0"
-six = ">=1.15.0"
-urllib3 = ">=1.26.0"
+requests = ">=2.20.0"
+six = ">=1.10.0"
 
 [package.extras]
 doc = ["Sphinx (>=1.5.2)"]
@@ -296,7 +295,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4"
-content-hash = "b5571a8b79b745a3f13a3d6cbcad98d7efd53af12841949501ce7f365d4648fe"
+content-hash = "7590ee0d4b1ba2d4f2d07f67ab3ac29dbf103087daea994e9887b5fc1261e51a"
 
 [metadata.files]
 beautifulsoup4 = [
@@ -426,9 +425,9 @@ soupsieve = [
     {file = "soupsieve-2.3.1.tar.gz", hash = "sha256:b8d49b1cd4f037c7082a9683dfa1801aa2597fb11c3a1155b7a5b94829b4f1f9"},
 ]
 spotipy = [
-    {file = "spotipy-2.19.0-py2-none-any.whl", hash = "sha256:dd6de229351bb6cf4d9bc169c5e183288da795f5a8265968dd98e95c037f9e7a"},
-    {file = "spotipy-2.19.0-py3-none-any.whl", hash = "sha256:766f9ef96d61851d7884c4553f2de2527c3af01df603985f6987543bb28e3ff5"},
-    {file = "spotipy-2.19.0.tar.gz", hash = "sha256:904f6e813dba837758e9510c1bee51d7ca217f169246625a13e693733dc33543"},
+    {file = "spotipy-2.16.0-py2-none-any.whl", hash = "sha256:800330badc1b953417dace1532a586220d35b2240eb2e538e883e19e6bf1b53d"},
+    {file = "spotipy-2.16.0-py3-none-any.whl", hash = "sha256:9d07b8948c30d8a338805440797263749ccad07c22009f9b3112aa2bcb2ebcea"},
+    {file = "spotipy-2.16.0.tar.gz", hash = "sha256:315eadd1248053ed336b4d3adbf2e3c32895fdbb0cfcd170542c848c8fd45649"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.7-py2.py3-none-any.whl", hash = "sha256:c4fdf4019605b6e5423637e01bc9fe4daef873709a7973e195ceba0a62bbc844"},
