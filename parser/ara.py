@@ -1,17 +1,27 @@
+import json
+
+from websocket import create_connection
+
 from parser import BaseFetcher
 from utils import *
 
-URL = "http://www.arabella.at/live-feed/ajax.php?station=zenon-rp-wien"
+URL = "wss://www.arabella.at/api/_socket/"
 
 
 class ArabellaFetcher(BaseFetcher):
     def get(self, channel):
-        response = fetch(URL, True)
-        if response:
-            for track in response["songs"]:
-                artist = track["artist"]
-                title = track["title"]
-                dt = track["start_date_time"]
-                time = datetime(year=int(dt["year"]), month=int(dt["month"]), day=int(dt["day"]),
-                                hour=int(dt["hours"]), minute=int(dt["minutes"]), second=int(dt["seconds"]))
-                yield time, artist, title
+        ws = create_connection(URL, suppress_origin=True)
+        init = ws.recv()
+
+        ws.send(json.dumps({"type": "select_channels", "channelIds": [1]}))
+
+        result = ws.recv()
+        data = json.loads(result)
+        tracks = [data["currentTrack"]]
+        tracks.extend(data["previousTracks"])
+        tracks.extend(data["futureTracks"])
+        for track in tracks:
+            artist = track["artist"]
+            title = track["title"]
+            time = time_to_date(string_to_time(track["time"], seconds=False))
+            yield time, artist, title
