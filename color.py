@@ -31,7 +31,7 @@ else:
 
 query = Song.select().where(
     (Song.show == 0) & (Song.spotify_data == 1) & (Song.image_large.is_null(False)) & (Song.background_color.is_null()))
-for song in query.order_by(fn.Rand()).limit(limit):
+for song in query.order_by(fn.random()).limit(limit):
     print(song.title)
     url = song.image_large
     print(url)
