@@ -1,20 +1,41 @@
+import json
 import re
 import sys
 from time import sleep
 
 import sentry_sdk
 import spotipy
+from redis import Redis
+from spotipy import CacheHandler
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import config
-from config import spotify
 from models import *
 
 if config.sentryDSN:
     client = sentry_sdk.init(dsn=config.sentryDSN)
 
-crm = SpotifyClientCredentials(**spotify)
-sp = spotipy.Spotify(client_credentials_manager=crm)
+
+class RedisCacheHandler(CacheHandler):
+    """
+    based on https://github.com/plamere/spotipy/pull/747
+    """
+
+    def __init__(self, redis):
+        self.redis = redis
+
+    def get_cached_token(self):
+        token_info = self.redis.get('token_info')
+        if token_info:
+            return json.loads(token_info)
+
+    def save_token_to_cache(self, token_info):
+        self.redis.set('token_info', json.dumps(token_info))
+
+
+r = Redis(db=config.redisDB)
+crm = SpotifyClientCredentials(**config.spotify, cache_handler=RedisCacheHandler(r))
+sp = spotipy.Spotify(client_credentials_manager=crm, requests_session=False)
 
 if len(sys.argv) > 1:
     limit = int(sys.argv[1])

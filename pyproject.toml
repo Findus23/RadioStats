@@ -10,7 +10,7 @@ requests = "^2.22.0"
 Flask = "^2.0.0"
 Flask-Caching = "^1.8.0"
 sentry-sdk = {extras = ["flask"], version = "^1.1.0"}
-spotipy = "2.16.0"
+spotipy = "^2.16.0"
 peewee = "^3.13.1"
 beautifulsoup4 = "^4.8.2"
 pytz = "^2021.1"
