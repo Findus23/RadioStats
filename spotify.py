@@ -3,10 +3,10 @@ import re
 import sys
 from time import sleep
 
+import requests
 import sentry_sdk
-import spotipy
 from redis import Redis
-from spotipy import CacheHandler
+from spotipy import CacheHandler, Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import config
@@ -33,9 +33,21 @@ class RedisCacheHandler(CacheHandler):
         self.redis.set('token_info', json.dumps(token_info))
 
 
+class CustomSpotify(Spotify):
+    def __del__(self):
+        if requests is not None and requests.Session is not None and isinstance(self._session, requests.Session):
+            self._session.close()
+
+
+class CustomSpotifyClientCredentials(SpotifyClientCredentials):
+    def __del__(self):
+        if requests is not None and requests.Session is not None and isinstance(self._session, requests.Session):
+            self._session.close()
+
+
 r = Redis(db=config.redisDB)
-crm = SpotifyClientCredentials(**config.spotify, cache_handler=RedisCacheHandler(r))
-sp = spotipy.Spotify(client_credentials_manager=crm, requests_session=False)
+crm = CustomSpotifyClientCredentials(**config.spotify, cache_handler=RedisCacheHandler(r))
+sp = CustomSpotify(client_credentials_manager=crm)
 
 if len(sys.argv) > 1:
     limit = int(sys.argv[1])
