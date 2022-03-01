@@ -49,6 +49,7 @@ def add_entry(time, artist, title):
 
 for channel in Channel.select():
     if channel.has_data:
+        if channel.shortname != "886": continue
         if channel.shortname == "kht":
             pars = KroneHitFetcher()
         elif channel.shortname == "886":
