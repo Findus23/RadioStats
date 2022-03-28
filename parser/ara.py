@@ -10,7 +10,11 @@ URL = "wss://www.arabella.at/api/_socket/"
 
 class ArabellaFetcher(BaseFetcher):
     def get(self, channel):
-        ws: WebSocket = create_connection(URL, suppress_origin=True)
+        ws: WebSocket = create_connection(
+            URL,
+            suppress_origin=True,
+            header=["User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0"]
+        )
         init = ws.recv()
 
         ws.send(json.dumps({"type": "select_channels", "channelIds": [1]}))
