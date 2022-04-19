@@ -5,7 +5,7 @@ description = ""
 authors = ["Lukas Winkler <git@lw1.at>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4"
+python = ">=3.9,<4"
 requests = "^2.22.0"
 Flask = "^2.0.0"
 Flask-Caching = "^1.8.0"
