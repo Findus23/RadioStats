@@ -37,7 +37,7 @@
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
     }
 
-    const baseURL = (import.meta.env.NODE_ENV === "production") ? "/api/" : "http://127.0.0.1:5000/api/";
+    const baseURL = "/api/";
 
     export default {
         name: "detailview",

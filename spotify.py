@@ -6,6 +6,7 @@ from time import sleep
 import requests
 import sentry_sdk
 from redis import Redis
+from requests import HTTPError
 from spotipy import CacheHandler, Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -72,7 +73,14 @@ for song in query.limit(limit):
     sleep(0.1)
     searchtitle = re.sub("[\(\[].*?[\)\]]", "", song.title)
     searchartist = song.artist.replace("&", "").replace("Feat.", "")
-    results = sp.search(q=searchtitle + ' ' + searchartist, type='track', limit=1)
+
+    try:
+        results = sp.search(q=searchtitle + ' ' + searchartist, type='track', limit=1)
+    except HTTPError:
+        if len(searchtitle) > 40:
+            song.spotify_data = False
+        else:
+            raise
     if len(results["tracks"]["items"]) == 0:
         song.spotify_data = False
         print("not found")
