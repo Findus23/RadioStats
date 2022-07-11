@@ -33,7 +33,7 @@
     import moment from "moment";
     import "moment/locale/de-at";
 
-    if (import.meta.env.NODE_ENV === "production") {
+    if (import.meta.env.PROD) {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
     }
 

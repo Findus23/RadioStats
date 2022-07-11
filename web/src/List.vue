@@ -107,7 +107,7 @@ import {de} from 'vuejs-datepicker/dist/locale';
 import Info from "./Info.vue";
 import {icon} from "./utils";
 
-if (import.meta.env.NODE_ENV === "production") {
+if (import.meta.env.PROD) {
     axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
 }
 
