@@ -6,8 +6,7 @@ from time import sleep
 import requests
 import sentry_sdk
 from redis import Redis
-from requests.exceptions import HTTPError
-from spotipy import CacheHandler, Spotify
+from spotipy import CacheHandler, Spotify, SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import config
@@ -76,7 +75,7 @@ for song in query.limit(limit):
 
     try:
         results = sp.search(q=searchtitle + ' ' + searchartist, type='track', limit=1)
-    except HTTPError:
+    except SpotifyException:
         if len(searchtitle) > 40:
             song.spotify_data = False
             song.save()
