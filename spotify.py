@@ -76,7 +76,7 @@ for song in query.limit(limit):
     try:
         results = sp.search(q=searchtitle + ' ' + searchartist, type='track', limit=1)
     except SpotifyException:
-        if len(searchtitle) > 40:
+        if len(searchtitle + ' ' + searchartist) > 50:
             song.spotify_data = False
             song.save()
             continue
