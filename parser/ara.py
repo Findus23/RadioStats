@@ -5,13 +5,13 @@ from websocket import create_connection, WebSocket
 from parser import BaseFetcher
 from utils import *
 
-URL = "wss://www.arabella.at/api/_socket/"
 
 
 class ArabellaFetcher(BaseFetcher):
+    URL = "wss://www.arabella.at/api/_socket/"
     def get(self, channel):
         ws: WebSocket = create_connection(
-            URL,
+            self.URL,
             suppress_origin=True,
             header=["User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0"]
         )
@@ -23,8 +23,10 @@ class ArabellaFetcher(BaseFetcher):
         ws.close()
         data = json.loads(result)
         tracks = [data["currentTrack"]]
-        tracks.extend(data["previousTracks"])
-        tracks.extend(data["futureTracks"])
+        if "previousTracks" in data:
+            tracks.extend(data["previousTracks"])
+        if "futureTracks" in data:
+            tracks.extend(data["futureTracks"])
         for track in tracks:
             artist = track["artist"]
             title = track["title"]
