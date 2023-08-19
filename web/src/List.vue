@@ -96,7 +96,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/de-at";
@@ -104,6 +104,7 @@ import Datepicker from 'vue3-datepicker';
 import { deAT } from 'date-fns/locale'
 import Info from "./Info.vue";
 import {icon} from "./utils";
+import {defineComponent} from 'vue'
 
 if (import.meta.env.PROD) {
     axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
@@ -111,7 +112,7 @@ if (import.meta.env.PROD) {
 
 const baseURL = "/api/";
 
-export default {
+export default defineComponent({
     components: {Datepicker, Info},
     name: 'list',
     data() {
@@ -310,7 +311,7 @@ export default {
         this.getChannels();
         this.updateSelection();
     }
-};
+});
 </script>
 
 <style lang="scss">

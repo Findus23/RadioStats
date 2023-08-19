@@ -17,7 +17,7 @@ import vbg from "./icons/vbg.png"
 import wie from "./icons/wie.png"
 
 
-export function icon(id) {
+export function icon(id:string) {
     switch (id) {
         case "886":
             return aas

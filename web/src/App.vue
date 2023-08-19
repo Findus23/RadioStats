@@ -4,13 +4,14 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 // import "./node_modules/normalize.css/normalize.css"
+import {defineComponent} from 'vue'
 
-export default {
+export default defineComponent({
     name: 'app',
     props: ["language"],
-};
+});
 </script>
 
 <style lang="scss">

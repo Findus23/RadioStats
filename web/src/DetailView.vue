@@ -28,10 +28,11 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import axios from "axios";
     import moment from "moment";
     import "moment/locale/de-at";
+    import {defineComponent} from 'vue'
 
     if (import.meta.env.PROD) {
         axios.defaults.headers.common['X-Requested-With'] = "XMLHttpRequest";
@@ -39,7 +40,7 @@
 
     const baseURL = "/api/";
 
-    export default {
+    export default defineComponent({
         name: "detailview",
         data() {
             return {
@@ -77,7 +78,7 @@
                 return this.songs[this.$route.params.songId];
             },
         }
-    };
+    });
 </script>
 
 <style lang="scss">
