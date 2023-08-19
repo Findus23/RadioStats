@@ -65,7 +65,6 @@
                         response.data.forEach(function(time) {
                             vm.plays.push(moment(time));
                         });
-                        // document.title = "Radiostats - " + vm.channels[vm.channel].stationname;
 
                     })
                     .catch(function(error) {
@@ -76,13 +75,6 @@
         computed: {
             song() {
                 return this.songs[this.$route.params.songId];
-            },
-        },
-        components: {},
-        watch: {
-            song: function() {
-                this.getPlays();
-                document.title = "Radiostats - " + this.song.song.title + " - " + this.song.song.artist;
             },
         }
     };

@@ -1,13 +1,13 @@
-import {createVuePlugin} from 'vite-plugin-vue2'
+import vue from '@vitejs/plugin-vue'
 import {defineConfig} from 'vite'
 
 export default defineConfig({
     plugins: [
-        createVuePlugin()
+        vue()
     ],
     server: {
         proxy: {
-            "/api": "http://localhost:5000"
+            "/api": "http://127.0.0.1:5000"
         }
     },
     build: {

@@ -28,7 +28,7 @@
         <transition name="expand">
             <div id="date" class="customRow" v-if="showDate">
                 <div>
-                    <datepicker :language="de" v-model="date" :mondayFirst="true" :inline="true"
+                    <datepicker :language="locale" v-model="date"  :inline="true"
                                 :highlighted="highlighted"></datepicker>
 
                     <div v-if="showMore" v-on:click="getMany" class="getMany">
@@ -80,9 +80,7 @@
                         <td colspan="4" class="detailWrapper">
                             <router-view :songs="songs"
                                          :color="{backgroundColor:channelData.primary_color,color:channelData.secondary_color}"
-                                         :momentDate="momentDate" :dateType="dateType">
-                                <!-- here the ItemModal component will be rendered -->
-                            </router-view>
+                                         :momentDate="momentDate" :dateType="dateType"></router-view>
                         </td>
                     </tr>
                 </template>
@@ -102,8 +100,8 @@
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/de-at";
-import Datepicker from 'vuejs-datepicker';
-import {de} from 'vuejs-datepicker/dist/locale';
+import Datepicker from 'vue3-datepicker';
+import { deAT } from 'date-fns/locale'
 import Info from "./Info.vue";
 import {icon} from "./utils";
 
@@ -130,7 +128,7 @@ export default {
                 to: new Date(),
             },
             showDate: false,
-            de: de
+            locale: deAT
         };
     },
     props: ["channel"],
@@ -203,7 +201,8 @@ export default {
                             }
                         })
                             .then(response => {
-                                this.$set(this.songs, urlsongID, response.data);
+                              this.songs[urlsongID] = response.data
+                                // this.$set(this.songs, urlsongID, response.data);
                             });
 
                         console.log("Song not in view: " + urlsongID);
@@ -291,7 +290,7 @@ export default {
     },
     watch: {
         channel: function () {
-            document.title = "Radiostats - " + this.channelData.stationname;
+            // document.title = "Radiostats - " + this.channelData.stationname;
             this.getPopular();
         },
         '$route.name': function (id) {
