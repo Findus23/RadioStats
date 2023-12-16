@@ -15,7 +15,7 @@ from models import *
 
 def to_rgb_string(r: float, g: float, b: float) -> str:
     r, g, b = map(int, [r, g, b])
-    return "{0:02x}{1:02x}{2:02x}".format(r, g, b)
+    return "{:02x}{:02x}{:02x}".format(r, g, b)
 
 
 cwd = Path(__file__).resolve().parent
